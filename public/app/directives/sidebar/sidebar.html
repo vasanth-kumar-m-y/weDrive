@@ -1,0 +1,31 @@
+<div class="navbar-default sidebar" id="side-menu-main" role="navigation">
+    <div class="sidebar-nav navbar-collapse">
+        <ul class="nav in" id="side-menu">
+            <li ng-repeat="category in categories">
+                <a ng-click="selectCategory($index + 1)"
+                   ng-class="{ 'active': $index == selectedCategoryIndex }">{{category.category_name}}
+                    <span ng-if="$index != selectedCategoryIndex"
+                          class="glyphicon glyphicon-menu-right pull-right"></span>
+                    <span ng-if="$index == selectedCategoryIndex"
+                          class="glyphicon glyphicon-menu-down pull-right"></span>
+                </a>
+                <ul class="nav nav-second-level"
+                    collapse="collapseVar!={{$index + 1}}"
+                    id="side-secondary-menu">
+                    <li ui-sref-active="active"
+                        ng-repeat="subcat in category.subcategories">
+                        <a ui-sref="dashboard.panels-wells"
+                           ng-class="{ 'active': $index == selectedSubcategoryIndex }"
+                           ng-click="selectItem($index); selectSubCategory({subcat : subcat})">{{subcat.subcategory_name}}
+                        </a>
+                    </li>
+                </ul>
+                <!-- /.nav-second-level -->
+            </li>
+        </ul>
+    </div>
+    <!-- /.sidebar-collapse -->
+</div> 
+
+
+

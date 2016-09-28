@@ -1,0 +1,10 @@
+{
+  "browser": true,
+  "globalstrict": true,
+  "node": true,
+  "predef": ["angular", "moment"],
+  "quotmark": "single",
+  "strict": true,
+  "trailing": true,
+  "unused": true
+}

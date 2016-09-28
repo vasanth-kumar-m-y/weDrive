@@ -1,0 +1,203 @@
+<div class="container">
+    <div class="row">
+    	 <div ng-controller="UpdateDriverDetails">
+             <div class="col-md-12 user-menu user-pad" style="border: 2px #3F799B solid;border-radius:10px;background:#FFFFFF">
+                 <div class="signup-section">
+                     <form>
+                         <div class="row">
+                             <div class="col-xs-12 col-sm-12 col-md-12" >
+                                 <center><h4 style="margin-top: 22px; margin-bottom: 20px; color: #3F799B; font-weight: 400; font-size: 22px">UPDATE DRIVER INFORMATION </h4></center>
+                             </div>
+                             <div class="col-xs-12 col-sm-8 col-md-6" style="padding-bottom: 10px; border-right: 1px #3F799B solid;">
+                             		<div class="form-group">
+							              <div class="col-md-4" style="padding-top: 7px;">
+							                  <label for="classifiedTitle">First Name<b style="color: #e51385">*</b></label>
+							              </div>
+							              <div class="col-md-8">
+							                  <input type="text" name="first_name" id="first_name" class="form-control input-lg" style="height: 38px;"
+							                                            placeholder="Please enter first name" tabindex="1" ng-model="master.firstname" required>
+							              </div>
+							          </div>
+                             </div>
+                             <div class="col-xs-12 col-sm-8 col-md-6" style="padding-bottom: 10px;">
+                                 <div class="form-group">
+                                      <div class="col-md-4" style="padding-top: 7px;">
+							               <label for="classifiedTitle">Last Name</label>
+							           </div>
+                                     <div class="col-md-8">
+                                     	 <input type="text" name="last_name" id="last_name" class="form-control input-lg" style="height: 38px;"
+                                            placeholder="Please enter last name" tabindex="2" ng-model="master.lastname">
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row">
+                             <div class="col-xs-12 col-sm-8 col-md-6" style="padding-bottom: 10px; border-right: 1px #3F799B solid;">
+                             	<div class="form-group">
+                                      <div class="col-md-4" style="padding-top: 7px;">
+							               <label for="classifiedTitle">Email Id</label>
+							           </div>
+                                     <div class="col-md-8">
+                                     	 <input type="email" name="email" id="email" class="form-control input-lg" style="height: 38px;"
+                                    placeholder="Please enter the email id" tabindex="4" ng-model="master.email">
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="col-xs-12 col-sm-8 col-md-6" style="padding-bottom: 10px;">
+                             	<div class="form-group">
+                                       <div class="col-md-4" style="padding-top: 7px;">
+							               <label for="classifiedTitle">Phone Number<b style="color: #e51385">*</b></label>
+							           </div>
+	                                     <div class="col-md-8">
+                                     	 <input type="text" name="phonenumber" id="phonenumber" class="form-control input-lg" style="height: 38px;"
+                                    placeholder="Please enter the phone number" tabindex="4" ng-model="master.phonenumber" required>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                         
+                         <div class="row">
+                             <div class="col-xs-12 col-sm-8 col-md-6" style="padding-bottom: 10px; border-right: 1px #3F799B solid;">
+                             	<div class="form-group">
+                                     <div class="col-md-4" style="padding-top: 7px;">
+						                 <label for="classifiedTitle">Licence Number<b style="color: #e51385">*</b></label>
+						             </div>
+                                     <div class="col-md-8">
+                                     	 <input type="text" name="licenceno" id="licenceno" class="form-control input-lg" style="height: 38px;"
+                                    placeholder="Please enter the licence number" tabindex="4" ng-model="master.licenceno" required>
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="col-xs-12 col-sm-8 col-md-6" style="padding-bottom: 10px;">
+                             	<div class="form-group">
+                                     <div class="col-md-4" style="padding-top: 7px;">
+							               <label for="classifiedTitle">Car Type<b style="color: #e51385">*</b></label>
+							          </div>
+                                     <div class="col-md-8">
+                                     	 <select name="cartype" id="cartype" class="form-control" ng-model="master.cartype">
+							               <option value="Automatic">Automatic</option>
+							               <option value="Manual">Manual</option>
+							               <option value="Any Type">Any Type</option>
+							           </select>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row">
+                             <div class="col-xs-12 col-sm-8 col-md-6" style="padding-bottom: 10px; border-right: 1px #3F799B solid;">
+                             	<div class="form-group">
+                                     <div class="col-md-4" style="padding-top: 7px;">
+							               <label for="classifiedTitle">Address 1<b style="color: #e51385">*</b></label>
+							          </div>
+                                     <div class="col-md-8">
+                                     	<input type="text" name="address1" id="address1" class="form-control input-lg" style="height: 38px;"
+                                    placeholder="Please enter the address 1" tabindex="4" ng-model="master.address1" required>
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="col-xs-12 col-sm-8 col-md-6" style="padding-bottom: 10px;">
+                             	<div class="form-group">
+                                     <div class="col-md-4" style="padding-top: 7px;">
+							               <label for="classifiedTitle">Address 2</label>
+							          </div>
+                                     <div class="col-md-8">
+                                     	<input type="text" name="address2" id="address2" class="form-control input-lg" style="height: 38px;"
+                                    placeholder="Please enter the address 2" tabindex="4" ng-model="master.address2">
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row">
+                             <div class="col-xs-12 col-sm-8 col-md-6" style="padding-bottom: 10px; border-right: 1px #3F799B solid;">
+                             	<div class="form-group">
+                                     <div class="col-md-4" style="padding-top: 7px;">
+							               <label for="classifiedTitle">City<b style="color: #e51385">*</b></label>
+							          </div>
+                                     <div class="col-md-8">
+                                     	<input type="text" name="city" id="city" class="form-control input-lg" style="height: 38px;"
+                                    placeholder="Please enter the city" tabindex="4" ng-model="master.city" required>
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="col-xs-12 col-sm-8 col-md-6" style="padding-bottom: 10px;">
+                             	<div class="form-group">
+                                     <div class="col-md-4" style="padding-top: 7px;">
+							               <label for="classifiedTitle">Pincode<b style="color: #e51385">*</b></label>
+							          </div>
+                                     <div class="col-md-8">
+                                     	<input type="text" name="pincode" id="pincode" class="form-control input-lg" style="height: 38px;"
+                                    placeholder="Please enter the pincode" tabindex="4" ng-model="master.pincode" required>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                         
+                         <div class="row">
+                             <div class="col-xs-12 col-sm-8 col-md-6" style="padding-bottom: 10px; border-right: 1px #3F799B solid;">
+                             	<div class="form-group">
+                                     <div class="col-md-4" style="padding-top: 7px;">
+							               <label for="classifiedTitle">State<b style="color: #e51385">*</b></label>
+							          </div>
+                                     <div class="col-md-8">
+                                     	<input type="text" name="state" id="state" class="form-control input-lg" style="height: 38px;"
+                                    placeholder="Please enter the state" tabindex="4" ng-model="master.state" required>
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="col-xs-12 col-sm-8 col-md-6" style="padding-bottom: 10px;">
+                             	<div class="form-group">
+                                     <div class="col-md-4" style="padding-top: 7px;">
+							               <label for="classifiedTitle">Country<b style="color: #e51385">*</b></label>
+							          </div>
+                                     <div class="col-md-8">
+                                     	<input type="text" name="country" id="country" class="form-control input-lg" style="height: 38px;"
+                                    placeholder="Please enter the country" tabindex="4" ng-model="master.country" required>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div><br>
+                         <div class="row">
+                             <div class="col-xs-12 col-sm-8 col-md-6"  style="padding-bottom: 10px;">
+                             	<div class="form-group">
+                                     <div class="col-md-4">
+               
+          							</div>
+                                     <div class="col-md-8">
+                                     	<span us-spinner="{radius:6, width:2, length: 2,color: '#e50880'}" spinner-key="spinner-1" ></span>
+                                 		<button class="btn btn-primary btn-block btn-lg" tabindex="22" ng-click="updateDriverInfo(master)">Update</button>
+                                     </div>
+                                 </div>
+                                 
+                             </div>
+                              <div class="col-xs-12 col-sm-8 col-md-6"  style="padding-bottom: 10px;">
+                              	<div class="form-group">
+                                     <div class="col-md-8">
+							              <button class="btn btn-primary btn-block btn-lg" tabindex="22" ng-click="cancelRegistration()">Cancel</button>
+							          </div>
+                                     <div class="col-md-4">
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </form>
+                 </div>
+             </div>
+         </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        
+        
+        
+        
+    </div>
+</div>

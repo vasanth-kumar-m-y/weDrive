@@ -1,0 +1,33 @@
+{
+  "name": "whatsapp-sharing",
+  "version": "1.3.4",
+  "homepage": "https://github.com/kriskbx/whatsapp-sharing",
+  "authors": [
+    "kriskbx"
+  ],
+  "main": "dist/whatsapp-button.js",
+  "keywords": [
+    "whatsapp",
+    "sharing",
+    "button",
+    "whats",
+    "app"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "1.3.4",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.3.4",
+    "commit": "90958120983114cde174a7473b1226ed784c7c09"
+  },
+  "_source": "git://github.com/kriskbx/whatsapp-sharing.git",
+  "_target": "~1.3.3",
+  "_originalSource": "whatsapp-sharing"
+}

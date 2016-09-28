@@ -1,0 +1,25 @@
+{
+  "name": "ngGAPI",
+  "main": "gapi.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ],
+  "devDependencies": {
+    "angular": "~1.3.12",
+    "angular-mocks": "~1.3.12",
+    "angular-mocks-unstable": "~1.1.5",
+    "angular-unstable": "1.1.5"
+  },
+  "homepage": "https://github.com/christiansmith/ngGAPI",
+  "_release": "98ca8de3be",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "98ca8de3befd909e6deaba3446c5fb9c912246dc"
+  },
+  "_source": "https://github.com/christiansmith/ngGAPI.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/christiansmith/ngGAPI.git"
+}

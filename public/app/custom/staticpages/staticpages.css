@@ -1,0 +1,15 @@
+.staticpages p{
+	text-align: justify;
+	margin-top:20px;
+}
+.staticpages ul li{
+	text-align: justify;
+	margin-top:20px;
+}
+.staticpages h4{
+	color:#2D9DB8;
+	margin-top: 40px;
+}
+.staticpages a{
+	text-decoration: none;
+}

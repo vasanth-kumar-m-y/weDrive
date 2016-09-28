@@ -1,0 +1,14 @@
+{
+  "name": "ng-time-relative",
+  "homepage": "https://github.com/ehd/ng-time-relative",
+  "version": "0.3.0",
+  "_release": "0.3.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.3.0",
+    "commit": "b7b48434e5ab0b9ab2896ec17847735068bb29d5"
+  },
+  "_source": "git://github.com/ehd/ng-time-relative.git",
+  "_target": "~0.3.0",
+  "_originalSource": "ng-time-relative"
+}

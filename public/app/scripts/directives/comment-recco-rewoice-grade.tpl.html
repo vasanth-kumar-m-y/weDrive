@@ -1,0 +1,105 @@
+<div class="col-sm-12 feedback-section">
+    <div class="row text-center">
+        <div class="col-sm-4" ng-if="isComments">
+            <div class="commentStyle-store center-block">
+                <a href ng-click="toggleComments()">
+                    <span class="glyphicon glyphicon-comment"></span>
+                    <span style="font-size: 14px; font-weight: 600">{{ngCommentsMetadata.pagination.total}} Comments</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-sm-4" ng-if="isGrades">
+            <div class="rating-back-store">
+                <div class="ratingStyle text-center">
+                    <bold style="font-size: 12px">Grade It :</bold>
+                    <span id="grade-value" duo-stars value="{{userGrade}}"
+                          max="4" ng-click="addGrade({grade : userGrade})"
+                          data-ng-model="userGrade">
+                    </span>
+                    <p>
+                        <small style="font-size: 12px">Average: {{avgGrade}}
+                            Total: {{totalGrade}}
+                        </small>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4" ng-if="isRestream">
+            <div class="rewoiceStyle-store">
+                <button ng-click="addRestream()" class="btn btn-link">
+                    <span class="fa fa-share-square"></span>
+                    <span style="font-size: 14px; font-weight: 600">{{restreams}} restreams</span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row" ng-if="isHideComments">
+        <hr>
+        <div class="col-xs-12" style="margin: 10px 0px">
+            <div class="row">
+                <div class="col-xs-9">
+                    <input type="text" class="form-control" id="new-comment" ng-model="newComment" placeholder="Add comment"/>
+                </div>
+                <div class="col-xs-3">
+                    <a ng-click="addComment({value : newComment});"
+                       class="btn btn-primary btn-block">comment</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 text-center" ng-if="ngCommentsMetadata.pagination.total == 0">
+            <h4 style="padding: 20px 80px">There are no comments yet</h4>
+        </div>
+
+        <div class="col-xs-12 col-md-12" ng-repeat="comment in ngComments">
+                <div class="row" style="margin: 10px 0px">
+                    <div class="col-xs-1" style="padding: 5px">
+                        <a href="#/profile/{{comment.commenter_id}}"><img src="{{imageUrl}}{{comment.commenter_image}}/75" alt=""
+                                        class="img-responsive" style="padding: 0px; border: 0px"></a>
+                    </div>
+                    <div class="col-xs-9">
+                        <a href="#/profile/{{comment.commenter_id}}">
+                            <p style="font-weight: 600; color: #e50880">
+                                {{comment.commenter_name}}
+                            </p>
+                        </a>
+                        <p ng-show="!comment.editing">{{comment.comment}}</p>
+                        <div ng-show="comment.editing">
+                            <textarea  class="form-control" rows="2" ng-model="comment.comment"></textarea>
+                            <div class="btn-group pull-right" style="padding: 5px 0px">
+                                <button class="btn btn-default btn-sm" ng-click="comment.editing = false">Cancel</button>
+                                <button class="btn btn-primary btn-sm"
+                                        ng-click="comment.editing = false;updateComment({commentId : comment.comment_id, comment: comment.comment})">
+                                        Save
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-2" ng-if="comment.commenter_id == loggedInUserId && !comment.editing">
+
+                            <button ng-click="comment.editing = true" class="btn btn-link btn-sm"><span class="fa fa-edit"></span> update</button>
+                            <button ng-click="deleteComment({id : comment.id})" class="btn btn-link btn-sm"><span class="fa fa-remove"> delete</span></button>
+
+                    </div>
+                </div>
+        </div>
+
+        <div class="row text-center" ng-if="ngCommentsMetadata.pagination.total > 10">
+            <uib-pagination
+                    total-items="ngCommentsMetadata.pagination.total"
+                    ng-model="ngCommentsMetadata.pagination.current_page"
+                    max-size="ngCommentsMetadata.metadata.pagination.per_page"
+                    class="pagination-sm"
+                    boundary-links="true"
+                    rotate="false"
+                    num-pages="ngCommentsMetadata.pagination.total_pages"
+                    ng-change="loadComments({page : ngCommentsMetadata.pagination.current_page});">
+            </uib-pagination>
+        </div>
+    </div>
+</div>
+

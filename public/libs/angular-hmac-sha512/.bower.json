@@ -1,0 +1,31 @@
+{
+  "name": "angular-hmac-sha512",
+  "main": "angular-hmac-sha512.js",
+  "authors": [
+    "duncan <diablofong@gmail.com>"
+  ],
+  "description": "AngularJS Module. A Simple Service to Encrypt Use Hmac-sha512.",
+  "keywords": [
+    "Angularjs",
+    "Crypto-js",
+    "Hmac-sha512"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "homepage": "https://github.com/diablofong/angular-hmac-sha512",
+  "_release": "def24e9f3b",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "def24e9f3bee0a86a8cdd173f1a508f4b2f3460d"
+  },
+  "_source": "git://github.com/diablofong/angular-hmac-sha512.git",
+  "_target": "*",
+  "_originalSource": "angular-hmac-sha512"
+}

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="utf-8">
+	<title>OceanStyxx</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   <!--  <link rel="icon" href="../../favicon.ico"> -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700'
+          rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,500,800,700,600,300,200' rel='stylesheet'
+          type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
+
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="libs/angular-bootstrap-colorpicker/css/colorpicker.css" />
+    <link rel="stylesheet" href="libs/angular-loading-bar/build/loading-bar.css" />
+    <link rel="stylesheet" href="libs/angular-bootstrap-lightbox/dist/angular-bootstrap-lightbox.css" />
+    <link rel="stylesheet" href="libs/bootstrap-daterangepicker/daterangepicker-bs3.css" />
+    <link rel="stylesheet" href="libs/flexslider/flexslider.css" />
+    <link rel="stylesheet" href="libs/angular-google-places-autocomplete/src/autocomplete.css" />
+    <link rel="stylesheet" href="libs/angular-google-places-autocomplete/dist/autocomplete.min.css" />
+    <link rel="stylesheet" href="libs/intro.js/introjs.css" />
+    <link rel="stylesheet" href="libs/slick-carousel/slick/slick.css" />
+    <link rel="stylesheet" href="libs/slick-carousel/slick/slick-theme.css" />
+    <link rel="stylesheet" href="libs/sweetalert/lib/sweet-alert.css" />
+    <link rel="stylesheet" href="libs/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" />
+    <link rel="stylesheet" href="libs/bootstrap-css-only/css/bootstrap.css" />
+    <link rel="stylesheet" href="libs/bootstrap-lightbox/docs/assets/css/bootstrap-lightbox.css" />
+    <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="libs/bootstrap-social/bootstrap-social.css" />
+    <link rel="stylesheet" href="libs/Jcrop/css/Jcrop.css" />
+    <link rel="stylesheet" href="libs/ng-table/dist/ng-table.min.css" />
+    <link rel="stylesheet" href="libs/ng-tags-input/ng-tags-input.min.css" />
+    <link rel="stylesheet" href="libs/ngDialog/css/ngDialog.css" />
+    <link rel="stylesheet" href="libs/ngDialog/css/ngDialog-theme-default.css" />
+    <link rel="stylesheet" href="libs/textAngular/src/textAngular.css" />
+    <link rel="stylesheet" href="libs/toastr/toastr.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <link rel="stylesheet" href="libs/angular-bootstrap-datetimepicker/src/css/datetimepicker.css">
+    <link rel="stylesheet" href="libs/ngDialog/css/ngDialog-theme-plain.css" />
+    <link rel="stylesheet" href="build.css"/>
+    <link rel="stylesheet" href="animate.css"/>
+    <link rel="stylesheet" href="nsPopover.css"/>
+    <link rel="stylesheet" href="app.css"/>
+    <link rel="stylesheet" href="profile.css"/>
+<!--     <link rel="stylesheet" href="woice.css"/> -->
+    <link rel="stylesheet" href="vdrive.css"/>
+    <link rel="stylesheet" href="custom/staticpages/staticpages.css"/>
+
+
+    <!-- build:css(.tmp) styles/main.css -->
+
+    <!-- endbuild -->
+
+   <!--  <script type="text/javascript" src="https://platform.linkedin.com/in.js">
+        api_key: 78yxxkb6uvnro3
+        authorize: true
+        scope: r_basicprofile r_emailaddress w_share rw_company_admin
+    </script> -->
+    
+    <script>
+
+      var base; 
+     /*  var fbAppId       = '245052959173426';
+      var gmailAppId    = '947054555635-pvknme356teuh4nuhj1te5fbl41o08t4.apps.googleusercontent.com';
+      var linkedinAppId = '75g1n36kp2pmlc';
+
+       window.fbAsyncInit = function() {
+        FB.init({
+          appId      : fbAppId,
+          xfbml      : true,
+          version    : 'v2.5'
+        });
+      }; */
+
+      /* (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "//connect.facebook.net/en_US/sdk.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk')); */
+    </script> 
+</head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!-- <body ng-app="evezownapp" ng-controller="ApplicationCtrl"> -->
+<body ng-app="evezownapp" style="background: #AFE7FA;height:100%"> <!-- #A0E3FA -->
+<!-- Header -->
+<nav class="navbar navbar-default" >
+    <!-- <div ng-bind-html="preview_data.preview.embed.html | to_trusted"></div> -->
+    <!-- <div ng-include src='"partials/top-menu.html"' ng-controller="TopMenuCtrl" style="background:#ffffff"></div> -->
+    <div ng-include src='"partials/top-menu.html"' style="background:#ffffff"></div>
+</nav>
+<!-- Body -->
+<div class="container" ng-view style="padding-top: 10px;height:78.7%;">
+
+</div>
+<!-- Footer -->
+<div class="col-sm-12 text-center" style="background: #3F799B;padding-top:8px;">
+     <p style="margin:0px;">Terms of Use. <a href="#privacy" style="color : #CBFFFF;">Privacy Policy</a></p>
+     © 2016 <a target="_blank" href="#" title="" style="color : #CBFFFF;">V-drive</a>. All Rights Reserved. Powered by <a target="_blank" href="http://www.oceanstyxx.com" title="" style="color : #CBFFFF;">www.oceanstyxx.com</a>
+ </div>
+<!-- <footer id="footer"> class="navbar-static-bottom" overflow-auto;overflow-y: scroll;overflow-x: hidden;
+    <div class="container center-block ">
+        <div class="row" style="margin:0px;">
+            <div class="col-sm-12 text-center">
+                <p style="margin:0px;">Terms of Use. <a href="#privacy">Privacy Policy</a></p>
+                © 2016 <a target="_blank" href="#" title="">OceanStyxx</a>. All Rights Reserved. Powered by <a target="_blank" href="http://www.oceanstyxx.com" title="" >www.oceanstyxx.com</a>
+            </div>
+        </div>
+    </div>
+</footer> -->
+
+
+
+
+<!-- <div id="chat-container" class="fixed" ng-if="loggedIn" style="display:none;"  ng-include='"partials/chat/chat-form.html"'></div> -->
+
+<!-- /container -->
+
+
+<!-- <script src="https://maps.googleapis.com/maps/api/js?libraries=places"></script> -->
+
+<!-- build:js(.) scripts/vendor.js -->
+<!-- bower:js -->
+<script src="libs/es5-shim/es5-shim.js"></script>
+<script src="libs/jquery/dist/jquery.js"></script>
+<script src="libs/angular/angular.js"></script>
+<script src="libs/angular-animate/angular-animate.js"></script>
+<script src="libs/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="libs/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js"></script>
+<script src="libs/angular-loading-bar/build/loading-bar.js"></script>
+<script src="libs/angular-touch/angular-touch.js"></script>
+<script src="libs/bootstrap/dist/js/bootstrap.js"></script>
+<script src="libs/angular-bootstrap-lightbox/dist/angular-bootstrap-lightbox.js"></script>
+<script src="libs/angular-cookies/angular-cookies.js"></script>
+<script src="libs/angular-sanitize/angular-sanitize.js"></script>
+<script src="libs/angular-counter/counter.js"></script>
+<script src="libs/moment/moment.js"></script>
+<script src="libs/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script src="libs/angular-daterangepicker/js/angular-daterangepicker.js"></script>
+<script src="libs/angular-facebook/lib/angular-facebook.js"></script>
+<script src="libs/angular-file-upload/angular-file-upload.min.js"></script>
+<script src="libs/flexslider/jquery.flexslider.js"></script>
+<script src="libs/angular-flexslider/angular-flexslider.js"></script>
+<script src="libs/angular-google-places-autocomplete/src/autocomplete.js"></script>
+<script src="libs/angular-google-places-autocomplete/dist/autocomplete.min.js"></script>
+<script src="libs/angular-hmac-sha512/angular-hmac-sha512.js"></script>
+<script src="libs/intro.js/intro.js"></script>
+<script src="libs/angular-intro.js/src/angular-intro.js"></script>
+<script src="libs/angular-route/angular-route.js"></script>
+<script src="libs/slick-carousel/slick/slick.min.js"></script>
+<script src="libs/angular-slick/dist/slick.js"></script>
+<script src="libs/angular-social-links/angular-social-links.js"></script>
+<script src="libs/spin.js/spin.js"></script>
+<script src="libs/angular-spinner/angular-spinner.js"></script>
+<script src="libs/sweetalert/lib/sweet-alert.js"></script>
+<script src="libs/angular-sweetalert/SweetAlert.js"></script>
+<script src="libs/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="libs/angularjs-socialshare/dist/angular-socialshare.min.js"></script>
+<script src="libs/bootstrap-lightbox/docs/assets/js/bootstrap-lightbox.js"></script>
+<script src="libs/Jcrop/js/Jcrop.js"></script>
+<script src="libs/js-xlsx/dist/xlsx.js"></script>
+<script src="libs/angular-messages/angular-messages.js"></script>
+<script src="libs/ng-fab-form/dist/ng-fab-form.js"></script>
+<script src="libs/ng-file-upload/ng-file-upload.js"></script>
+<script src="libs/json3/lib/json3.js"></script>
+<script src="libs/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
+<script src="libs/lodash/lodash.js"></script>
+<script src="libs/ng-password-strength/dist/scripts/ng-password-strength.js"></script>
+<script src="libs/ng-table/dist/ng-table.min.js"></script>
+<script src="libs/ng-tags-input/ng-tags-input.min.js"></script>
+<script src="libs/ng-videosharing-embed/build/ng-videosharing-embed.min.js"></script>
+<script src="libs/ngDialog/js/ngDialog.js"></script>
+<script src="libs/ngGAPI/gapi.js"></script>
+<script src="libs/ngLinkedIn/ngLinkedIn.js"></script>
+<script src="libs/nsPopover/src/nsPopover.js"></script>
+<script src="libs/rangy/rangy-core.js"></script>
+<script src="libs/rangy/rangy-classapplier.js"></script>
+<script src="libs/rangy/rangy-highlighter.js"></script>
+<script src="libs/rangy/rangy-selectionsaverestore.js"></script>
+<script src="libs/rangy/rangy-serializer.js"></script>
+<script src="libs/rangy/rangy-textrange.js"></script>
+<script src="libs/textAngular/src/textAngular.js"></script>
+<script src="libs/textAngular/src/textAngular-sanitize.js"></script>
+<script src="libs/textAngular/src/textAngularSetup.js"></script>
+<script src="libs/toastr/toastr.js"></script>
+<script src="libs/whatsapp-sharing/dist/whatsapp-button.js"></script>
+<script src="libs/angular-payments/lib/angular-payments.js"></script>
+<!-- endbower -->
+<!-- endbuild -->
+<script src="libs/js-xlsx/shim.js"></script>
+<script src="libs/js-xlsx/jszip.js"></script>
+<script src="libs/js-xlsx/xlsx.js"></script>
+<script src="libs/js-xlsx/dist/ods.js"></script>
+<script src="custom/angular-read-more/readmore.js"></script>
+<!-- <script src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha1.js"></script> -->
+
+<script src="libs/ng-time-relative/dist/ng-time-relative.min.js"></script>
+<script src="//cdn.jsdelivr.net/satellizer/0.9.2/satellizer.min.js"></script>
+<script src="libs/angular-bootstrap-datetimepicker/src/js/datetimepicker.js"></script>
+
+<!--<script type="text/javascript" src="http://platform.linkedin.com/in.js">-->
+    <!--//here goes the api key, and the callback function-->
+    <!--api_key: 78-->
+    <!--mct0q0l2nefx-->
+    <!--authorize: true-->
+<!--</script>-->
+
+<!--<script type="IN/Login" data-onAuth="onLinkedInAuth"></script>-->
+
+<script src="scripts/app.js"></script>
+<!--<script src="authService.js"></script>
+ <script src="applicationCtrl.js"></script>
+<script src="partials/home/home.js"></script>
+<script src="partials/evezplace/home.js"></script>
+<script src="partials/admin/adminCtrl.js"></script>
+<script src="partials/woice/home.js"></script>
+<script src="partials/Trending/trendingCtrl.js"></script>
+<script src="partials/Recco/reccoController.js"></script>
+<script src="partials/invite/inviteCtrl.js"></script>
+<script src="partials/invite/inviteService.js"></script>
+<script src="partials/home/services.js"></script>
+<script src="partials/admin/AdminInviteCtrl.js"></script> -->
+<script src="partials/admin/AdminController.js"></script>
+<!--<script src="partials/admin/AdminMenuCtrl.js"></script>
+ <script src="partials/admin/bloglists.js"></script>
+<script src="partials/admin/forumlists.js"></script>
+<script src="partials/admin/storelist.js"></script>
+<script src="partials/admin/woiceinf.js"></script>
+<script src="partials/admin/woiceFlagCntr.js"></script>
+<script src="partials/admin/addBrandCntr.js"></script>
+<script src="partials/admin/getAllBrandCntr.js"></script>
+<script src="partials/admin/opportunitiesCntr.js"></script>
+<script src="partials/admin/EditBlogsCtrl.js"></script>
+<script src="partials/admin/blogsService.js"></script>
+<script src="partials/admin/groupService.js"></script>
+<script src="partials/admin/EventService.js"></script>
+<script src="partials/admin/forumService.js"></script>
+<script src="partials/admin/NewsletterCtrl.js"></script>
+<script src="partials/admin/profileDetailsService.js"></script>
+<script src="partials/admin/AdminInviteFrndsCtrl.js"></script>
+<script src="partials/admin/AlbumCtrl.js"></script>
+<script src="partials/admin/Manage/adminScreenCtrl.js"></script>
+<script src="partials/admin/Manage/editCategories.js"></script>
+<script src="partials/admin/Manage/adminConfigurationCtrl.js"></script>
+<script src="partials/admin/Manage/manageStoreLeftMenuController.js"></script>
+<script src="partials/admin/logsinf.js"></script>
+
+
+<script src="partials/admin/grouplists.js"></script>
+<script src="partials/admin/eventlist.js"></script>
+
+<script src="partials/home/registerCntrl.js"></script>
+<script src="partials/home/ResetPassword.js"></script>
+<script src="partials/profile/profileCtrl.js"></script>
+<script src="partials/profile/profileService.js"></script>
+<script src="partials/profile/profileCountCtrl.js"></script>
+
+<script src="directives/ngFileSelect.js"></script>
+<script src="factory/fileReader.js"></script>
+<script src="factory/imageService.js"></script>
+<script src="directives/ngCrop.js"></script>
+<script src="directives/fileread.js"></script>
+<script src="directives/socialShare.js"></script>
+<script src="directives/sidebar/sidebar-search/sidebar-search.js"></script>
+<script src="directives/sidebar/sidebar.js"></script>
+
+<script src="partials/Woice%20Comments/woiceCommentsCtrl.js"></script>
+<script src="partials/Community/community.js"></script>
+<script src="partials/Community/CirclesCtrl.js"></script>
+<script src="partials/Community/AlbumCtrl.js"></script>
+<script src="partials/Community/friendsService.js"></script>
+<script src="partials/Community/invitefriends.js"></script>
+<script src="partials/Community/inviteHistory.js"></script>
+
+<script src="partials/Community/blogCtrl.js"></script>
+<script src="partials/Community/EditBlogCtrl.js"></script>
+<script src="partials/Community/EventCtrl.js"></script>
+<script src="partials/Community/eventActivityService.js"></script>
+<script src="partials/Community/GroupCtrl.js"></script>
+<script src="partials/Community/activityCtrl.js"></script>
+<script src="partials/Community/forumCtrl.js"></script>
+<script src="partials/search/searchController.js"></script>
+<script src="partials/profile/details/profileDetailsCtrl.js"></script>
+<script src="partials/profile/details/profileDetailsService.js"></script>
+<script src="partials/evezplace/evezplaceHomeFactory.js"></script>
+<script src="partials/evezplace/home.js"></script>
+<script src="partials/evezplace/openStore.js"></script>
+<script src="partials/evezplace/createStore.js"></script>
+<script src="partials/evezplace/manage/store/manageStoreMenuCtrl.js"></script>
+<script src="partials/evezplace/manage/manageStore.js"></script>
+<script src="partials/evezplace/manage/store/orders/manageOrders.js"></script>
+<script src="partials/evezplace/browse/store/browseStore.js"></script>
+<script src="partials/evezplace/browse/store/storePlaceOrderCtrl.js"></script>
+<script src="partials/evezplace/browse/store/shoppingCartCtrl.js"></script>
+<script src="partials/evezplace/browse/store/productDetailsCtrl.js"></script>
+<script src="partials/evezplace/browse/store/storeFrontOfferCtrl.js"></script>
+<script src="partials/evezplace/browse/store/storeFrontCtrl.js"></script>
+<script src="partials/evezplace/browse/store/productRfiCtrl.js"></script>
+<script src="partials/evezplace/browse/store/storeRfqCtrl.js"></script>
+<script src="partials/evezplace/browse/classifieds/browseClassifieds.js"></script>
+<script src="partials/evezplace/createClassifieds.js"></script>
+<script src="partials/profile/ProfileMenuCtrl.js"></script>
+<script src="partials/profile/PromotionalMenuCtrl.js"></script>
+<script src="partials/admin/articles/articlesService.js"></script>
+<script src="partials/admin/articles/articlesCtrl.js"></script>
+<script src="partials/evezplace/classifiedsService.js"></script>
+<script src="partials/evezplace/classifiedsListService.js"></script>
+<script src="partials/evezplace/browse/store/storeService.js"></script>
+<script src="partials/evezplace/productSearch.js"></script>
+<script src="partials/evezplace/browse/store/orderCtrl.js"></script> -->
+<!--<script src="scripts/controllers/buyer/BuyerOrdersCtrl.js"></script>-->
+
+<!-- build:js({.tmp,app}) scripts/scripts.js -->
+
+<!-- <script src="scripts/directives/ngcommentreccorewoicegrade.js"></script>
+<script src="scripts/controllers/buyer/orders.js"></script>
+<script src="scripts/services/orderservice.js"></script>
+<script src="scripts/controllers/store/productline.js"></script>
+<script src="scripts/controllers/manage/store/managerequestinfo.js"></script>
+<script src="scripts/controllers/manage/store/managerequestquote.js"></script>
+<script src="scripts/controllers/classifieds/classifieddetails.js"></script>
+<script src="partials/evezplace/manage/Classifieds/manageClassifieds.js"></script>
+<script src="partials/evezplace/manage/Classifieds/manageClassifiedsMenuCtrl.js"></script>
+<script src="scripts/controllers/evezplace/evezplacepromotion.js"></script>
+<script src="scripts/controllers/admin/evezplace/managepromotion.js"></script>
+<script src="scripts/controllers/evezplace/createbrowsecontroller.js"></script>
+<script src="scripts/services/sectionconstants.js"></script>
+<script src="scripts/services/sectionnames.js"></script>
+<script src="scripts/controllers/admin/evezplace/manage_recommendations.js"></script>
+<script src="scripts/controllers/admin/evezplace/managetrendingitems.js"></script>
+<script src="scripts/controllers/evezplace/recommendation.js"></script>
+<script src="scripts/services/evezplacesection.js"></script>
+<script src="scripts/filters/addlimitellipsis.js"></script> -->
+
+<!-- <script src="custom/satellizer.js"></script> -->
+<script src="custom/angular-local-storage.min.js"></script>
+
+<!-- <script type="text/javascript" src="https://js.stripe.com/v2/"></script> -->
+
+
+ 
+
+<!-- endbuild -->
+
+<!--<script src="libs/ng-password-strength/dist/scripts/ng-password-strength.min.js"></script>-->
+<!--<script src="libs/underscore.string/dist/underscore.string.min.js"></script>-->
+<!--<script src="libs/underscore.string/test/underscore.js"></script>-->
+
+<!-- Don't forget to place the script that does the asynchronous loading of Google+ JavaScript API.
+             Because it is loaded asynchronously, it might take some time to load.
+             Place some loading notification, so user won't get confused.
+             You can use ng-show and ng-hide to show or hide your notification and accomplish best user experience. --><script>// <![CDATA[
+/* (function() {
+    var po = document.createElement('script'); 
+    po.type = 'text/javascript'; 
+    po.async = true;
+    po.src = 'https://apis.google.com/js/client:plusone.js';
+    var s = document.getElementsByTagName('script')[0]; 
+    s.parentNode.insertBefore(po, s);
+})(); */
+
+// ]]></script><!-- Second script needed for accessing Google API (gapi.*) . It's usage will be described in controller. --><script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+<script type="text/javascript">
+    
+    $(document).ready(function () {
+
+        var clickEvent = false;
+        $('#myCarousel').on('click', '.nav a', function () {
+
+            clickEvent = true;
+            $('.nav li').removeClass('active');
+            $(this).parent().addClass('active');
+        }).on('slid.bs.carousel', function (e) {
+            if (!clickEvent) {
+
+                var count = $('.nav').children().length - 1;
+                var current = $('.middle-navbar .nav-pills li.active');
+                current.removeClass('active').next().addClass('active');
+                var id = parseInt(current.data('slide-to'));
+                if (count == id) {
+                    $('.middle-navbar .nav-pills li').first().addClass('active');
+                }
+            }
+            clickEvent = false;
+        });
+
+        });
+</script>
+
+
+
+</body>
+</html>
+

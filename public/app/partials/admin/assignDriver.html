@@ -1,0 +1,47 @@
+<div class="container">
+    <div class="row">
+    	<div class="col-lg-12 col-md-12 col-sm-8 col-xs-9 bhoechie-tab-container">
+            <div class="col-lg-12 col-md-12 col-sm-12 bhoechie-tab">
+                <!-- flight section -->
+                <div class="bhoechie-tab-content active">
+                	   <center>
+				            <div class="table-responsive" ng-controller="AssignDriver" ng-cloak="">
+				               <table ng-table="activeDriverListTableParams" class="table table-bordred table-striped" border=0>
+				                 <div class="col-md-4" style="padding-left: 0px;">
+				                    <input type="text" class="form-control" placeholder="Search Driver" ng-model="activedriversearch"/>
+				                 </div>
+				
+				                    <tr ng-repeat="driverList in getActiveDriverList | filter:activedriversearch | orderBy:'id':false">
+				                        <td data-title="'Driver Name'" style="text-align: left;padding:3px;padding-left: 8px;vertical-align:middle;border-top: 1px solid #DF6;width:30%">{{driverList.first_name}}&nbsp;{{driverList.last_name}}</td>
+				                        <td data-title="'Driver Code'" style="text-align: left;padding:3px;padding-left: 8px;vertical-align:middle;border-top: 1px solid #DF6;width:20%"">{{driverList.driver_code}}</td>
+				                        <td data-title="'Phone Number'" style="text-align: left;padding:3px;padding-left: 8px;vertical-align:middle;border-top: 1px solid #DF6;width:20%"">{{driverList.phone_number}}</td>
+				                        <td data-title="'Licence No'" style="text-align: left;padding:3px;padding-left: 8px;vertical-align:middle;border-top: 1px solid #DF6;width:20%"">{{driverList.licence_no}}</td>
+				                        <td data-title="'Assign Driver'" style="text-align: left;padding:3px;padding-left: 8px;vertical-align:middle;border-top: 1px solid #DF6;width:10%"">
+				                           	
+				                           	<div class="col-md-10 btn btn-assign-primary" style="border-radius: 0px;"><a ng-click="assignDriverForDrive(driverList.id)" style="height:auto;padding:0px;color:#CBFFFF;text-decoration: none;">ASSIGN</a></div>
+				                           
+				                            <!-- <span style="padding:3px;vertical-align:middle;">
+				                            		<label><a href ng-click="assignDriver(booking)" class="topic-link" title="ASSIGN DRIVER"><span class="glyphicon glyphicon-text-background"></span>
+				                            		</a></label> 
+				                            </span> -->
+				                            
+				                        </td>
+				                         <tr ng-if="getActiveDriverList.length <= 0" ><td colspan="8"><b style="color:red">Sorry, there is no active driver currently.</b></td></tr>
+				                </table>
+				                <!-- <uib-pagination ng-show="getUser.length > 0" total-items="userPagination.total"
+				                                ng-model="currentUserPage"
+				                                max-size="maxSize"
+				                                class="pagination-custom pagination-sm pull-right"
+				                                boundary-links="true"
+				                                rotate="false"
+				                                num-pages="numPages"
+				                                ng-change="pageChanged()">
+				                </uib-pagination> -->
+				            </div>
+				        </div>
+				    </center>
+				                    
+                </div>
+            </div>
+    </div>
+</div>

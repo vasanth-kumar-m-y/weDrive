@@ -1,0 +1,35 @@
+<div class="container">
+    <!-- <span us-spinner="{radius:6, width:2, length: 2,color: '#e50880'}" spinner-key="spinner-1" spinner-start-active="true">
+    </span> -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-8 col-xs-9 bhoechie-tab-container">
+            <div class="col-lg-12 col-md-12 col-sm-12 bhoechie-tab">
+                <!-- flight section -->
+                <div class="bhoechie-tab-content active">
+                	   <center>
+				            <div class="table-responsive" ng-controller="BookingList" ng-cloak="">
+				               <table ng-table="bookingListTableParams" class="table table-bordred table-striped" border=0>
+				                 <div class="col-md-4" style="padding-left: 0px;">
+				                    <input type="text" class="form-control" placeholder="Filter data" ng-model="bookingsearch"/>
+				                 </div>
+				                    <tr ng-repeat="booking in getBookingRequest | filter:bookingsearch | orderBy:'id':false">
+				                        <td data-title="'Customer Name'" style="text-align: left;padding:3px;padding-left: 8px;vertical-align:middle;border-top: 1px solid #DF6;width:15%">{{booking.customer_name}} </td>
+				                        <td data-title="'Phone No.'" style="text-align: left;padding:3px;padding-left: 8px;vertical-align:middle;border-top: 1px solid #DF6;width:10%"">{{booking.customer_phone}}</td>
+				                        <td data-title="'Code'" style="text-align: left;padding:3px;padding-left: 8px;vertical-align:middle;border-top: 1px solid #DF6;width:7%"">{{booking.drive_code}} </td>
+				                        <td data-title="'Pickup Point'" style="text-align: left;padding:3px;padding-left: 8px;vertical-align:middle;border-top: 1px solid #DF6;width:25%"">{{booking.pickup_point}}</td>
+				                        <td data-title="'Drop Point'" style="text-align: left;padding:3px;padding-left: 8px;vertical-align:middle;border-top: 1px solid #DF6;width:25%"">{{booking.drop_point}}</td>
+				                        <td data-title="'Status'" style="text-align: left;padding:3px;padding-left: 8px;vertical-align:middle;border-top: 1px solid #DF6;width:8%"">{{booking.status}}</td>
+				                        <td data-title="'Action'" style="text-align: left;padding:3px;padding-left: 8px;vertical-align:middle;border-top: 1px solid #DF6;width:10%"">
+				                           	<div class="col-md-12 btn btn-assign-primary" style="border-radius: 0px;" ng-show="booking.status == 'Requested'"><a ng-click="assignDriver(booking.id)" style="height:auto;padding:0px;color:#CBFFFF;text-decoration: none;">ASSIGN DRIVER</a></div>
+				                        </td>
+				                         <tr ng-if="getBookingRequest.length <= 0" ><td colspan="8"><b style="color:red">Sorry, there is no drive request booked yet.</b></td></tr>
+				                </table>
+				            </div>
+				        </div>
+				    </center>
+				                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

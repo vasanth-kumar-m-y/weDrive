@@ -1,0 +1,36 @@
+{
+  "name": "whatsapp-sharing",
+  "version": "1.3.3",
+  "description": "WhatsApp Sharing Button",
+  "main": "-",
+  "scripts": {
+    "test": "grunt jshint:button"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kriskbx/whatsapp-sharing.git"
+  },
+  "keywords": [
+    "whatsapp",
+    "sharing",
+    "button",
+    "whats",
+    "app"
+  ],
+  "author": "kriskbx",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kriskbx/whatsapp-sharing/issues"
+  },
+  "homepage": "http://whatsapp-sharing.com",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-clean": "~0.4.1",
+    "grunt-contrib-concat": "~0.4.x",
+    "grunt-contrib-cssmin": "~0.10.0",
+    "grunt-contrib-jshint": "^0.11.2",
+    "grunt-contrib-uglify": "~0.5.0",
+    "grunt-data-uri": "~0.1.1"
+  }
+}
