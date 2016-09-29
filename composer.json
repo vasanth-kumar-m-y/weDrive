@@ -30,8 +30,7 @@
 			"app/Http/Controllers",
 		    "app/Models",
 		    "database/migrations",
-		    "database/seeds",
-            "library"
+		    "database/seeds"
         ],
         "psr-4": {
             "App\\": "app/"
