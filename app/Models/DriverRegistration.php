@@ -2,8 +2,8 @@
 namespace App\Models;
 
 class DriverRegistration extends \Eloquent {
-	protected $fillable = ['driver_code', 'first_name','last_name', 'phone_number','email_id','status','licence_no','car_type','profile_image'];
-
+	protected $fillable = [];
+    public $timestamps  = false;
 	/**
 	 * The database table used by the model.
 	 *
@@ -15,6 +15,11 @@ class DriverRegistration extends \Eloquent {
 
 	public function address()
     {
-        return $this->belongsTo('DriverAddress', 'id', 'driver_id');
+        return $this->belongsTo('App\Models\DriverAddress', 'id', 'driver_id');
+    }
+
+    public function transmissionType()
+    {
+        return $this->hasOne('App\Models\TransmissionType', 'id', 'transmission_type_id');
     }
 }

@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Input, DB, App, Config;
 use App\Models\DriverRegistration;
+use App\Repositories\DriverRegistrationRepository;
 use App\Http\Controllers\DriverRegistrationTransformer;
 use Illuminate\Support\Facades\Mail;
 use League\Fractal\Manager;
@@ -12,7 +13,14 @@ use League\Fractal\Resource\Item;
 
 class AdminController extends Controller
 {
+
+    public function __construct(DriverRegistrationRepository $driverRegistration)
+    {
+       parent::__construct();
+       $this->driverRegistration = $driverRegistration;
+    }
     
+
 	/** ********************************************** VDRIVE ADMIN APIS ********************************************************** **/
 	
     /** Rit
@@ -27,19 +35,19 @@ class AdminController extends Controller
         
     	try {
             
-    		$limit = Input::get('limit') ?: 10;
+    		$limit   = Input::get('limit') ?: 10;
     
-    		$users = DriverRegistration::paginate($limit);
-    
-    		if (!$users) {
+    		$drivers =  DriverRegistration::with('address', 'transmissionType')->paginate($limit);
+  
+    		if (!$drivers) {
     			return $this->responseNotFound('Driver Not Found!');
     		}
     
     		$fractal = new Manager();
     
-    		$usersResource = new Collection($users, new DriverRegistrationTransformer);
+    		$usersResource = new Collection($drivers, new DriverRegistrationTransformer());
     
-    		$usersResource->setPaginator(new IlluminatePaginatorAdapter($users));
+    		$usersResource->setPaginator(new IlluminatePaginatorAdapter($drivers));
     
     		$data = $fractal->createData($usersResource);
     
@@ -59,69 +67,65 @@ class AdminController extends Controller
      */
     public function driverRegistration()
     {
-    	try {
-    	    		
-    		$user = new DriverRegistration;
-    		$generatedDriverCode =bin2hex(openssl_random_pseudo_bytes(2));//16
-    		
-    	    $returnStatus = DB::table('driver_registration')->insert(array(
-    		 		'driver_code' 		=> $generatedDriverCode,
-    				'first_name' 		=> $inputs_array['firstname'],
-    				'last_name' 		=> $inputs_array['lastname'],
-    				'phone_number' 		=> $inputs_array['phonenumber'],
-    	    		'licence_no' 		=> $inputs_array['licenceno'],
-    	    		'car_type' 			=> $inputs_array['cartype'],
-    				'email_id' 			=> $inputs_array['email'],
-    				'status' 			=> "Offline"
-    		));  
-    	    $driverId = DB::getPdo()->lastInsertId();
 
-    		$driverAddressId = DB::table('driver_address')->insert(array(
-    				'address1' 	=> $inputs_array['address1'],
-    				'address2' 	=> $inputs_array['address2'],
-    				'city' 		=> $inputs_array['city'],
-    				'pincode' 	=> $inputs_array['pincode'],
-    				'state' 	=> $inputs_array['state'],
-    				'country' 	=> $inputs_array['country'],
-    				'driver_id' => $driverId
-    		));
-    		
-    		$successResponse = [
-    		'status' => true,
-    		'message' => 'Driver Registered successfully!'
-    				];
-    		
-    		return $this->setStatusCode(200)->respond($successResponse);
-    	} catch (Exception $e) {
-    		return $this->setStatusCode(500)->respondWithError("Driver registration failed.");
-    	}
+        try {
+             
+            $inputs       = Input::all();
+
+            $inputs_array = $inputs['data'];
+
+            $generatedDriverCode = bin2hex(openssl_random_pseudo_bytes(2));//16
+
+            $this->driverRegistration->registerDriver($generatedDriverCode, $inputs_array);
+
+            $successResponse = [
+                    'status'  => true,
+                    'message' => 'Driver Registered successfully!'
+            ];
+            
+            return $this->setStatusCode(200)->respond($successResponse);
+        
+        } catch (Exception $e) {
+    
+            $errorMessage = [
+                'status'  => false,
+                'message' => $e
+            ];
+
+            return $this->setStatusCode(500)->respondWithError($errorMessage);
+        }
+
     }
     
     /** Rit
      * API for deleting the driver
      * @return mixed
      */
-    public function DeleteDriver() {
+    public function DeleteDriver() 
+    {
+
     	try {
     
     		$inputs = Input::all();
+
     		$inputs_array = $inputs['data'];
     		
-    		$userId = $inputs_array['user_id'];
+    		$driverId = $inputs_array['user_id'];
     		
-    		DB::table('driver_registration')->where('id', '=', $userId)->delete();
+    		DriverRegistration::where('id', $driverId)->delete();
     
     		$successResponse = [
-    		'status' => true,
-    		'message' => 'Driver deleted successfully!'
-    				];
+        		'status'  => true,
+        		'message' => 'Driver deleted successfully!'
+    		];
     
     		return $this->setStatusCode(200)->respond($successResponse);
     
     	} catch (Exception $e) {
+
     		$errorMessage = [
-    		'status' => false,
-    		'message' => $e
+        		'status'   => false,
+        		'message'  => $e
     		];
     
     		return $this->setStatusCode(500)->respondWithError($errorMessage);
@@ -137,9 +141,13 @@ class AdminController extends Controller
     public function getDriverDetails($userId)
     {
     	try {
-    		$users = DriverRegistration::with('address')->find($userId);
+
+    		$users = DriverRegistration::with('address', 'transmissionType')->find($userId);
+
     		return $users->toJson();
+
     	} catch (Exception $e) {
+
     		return $this->setStatusCode(500)->respondWithError($e);
     	}
     }
@@ -258,6 +266,7 @@ class AdminController extends Controller
     
     	return $bokinglist->toJson();
     }
+
    
  
 }

@@ -134,7 +134,7 @@ evezownApp
                                 email: $scope.master.emailId,
                                 phonenumber: $scope.master.phonenumber,
                                 licenceno: $scope.master.licenceno,
-                                cartype: $scope.master.cartype,
+                                transmission_type: $scope.master.cartype,
                                 address1: $scope.master.address1,
                                 address2: $scope.master.address2,
                                 city: $scope.master.city,

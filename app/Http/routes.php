@@ -30,6 +30,12 @@ Route::group(['prefix' => 'v1', 'middleware' => 'cors'], function () {
 	Route::get('admin/{user_id}/getDriverDetails', 'AdminController@getDriverDetails');
 	Route::post('admin/updateDriverInfo', 'AdminController@updateDriverInfo');
 	Route::get('admin/getAllDriveRequest', 'AdminController@getAllDriveRequest');
+
+    Route::get('master/getPubs', 'MasterController@getAllPubs');
+    Route::get('master/getTransmissionType', 'MasterController@getAllTransmissionType');
+    Route::get('master/getCarType', 'MasterController@getAllCarType');
+	Route::get('master/getCountries', 'MasterController@getAllCountries');
+	Route::get('master/getStateByCountry/{country_id}', 'MasterController@getAllStatesByCountry');
 	
 	
 	// ------------------------ DRIVER APP ROUTE --------------------------------

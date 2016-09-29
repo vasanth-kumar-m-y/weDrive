@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\DriverRegistration;
+
 /**
  * Created by PhpStorm.
  * User: Vishu Venki @CreativeThoughts
@@ -14,27 +17,27 @@ class DriverRegistrationTransformer extends Fractal\TransformerAbstract
     /**
      * Turn this item object into a generic array
      *
-     * @param User|UserProfile $user
+     * @param User|UserProfile $driver
      * @return array
      */
-    public function transform(DriverRegistration $user)
+    public function transform(DriverRegistration $driver)
     {
         return [
-            'id'    		=> (int) $user['id'],
-            'drivercode' 	=> $user['driver_code'],
-            'firstname' 	=> $user['first_name'],
-            'lastname' 		=> $user['last_name'],
-            'email' 		=> $user['email_id'],
-            'phonenumber' 	=> $user['phone_number'],
-            'licenceno' 	=> $user['licence_no'],
-            'cartype' 		=> $user['car_type'],
-            'status'    	=> $user['status'],
-            'address1'   	=> $user->address['address1'],
-            'address2'   	=> $user->address['address2'],
-            'city'   		=> $user->address['city'],
-            'pincode'   	=> $user->address['pincode'],
-            'state'  		=> $user->address['state'],
-            'country'   	=> $user->address['country']
+            'id'    		    => (int) $driver['id'],
+            'drivercode' 	    => $driver['driver_code'],
+            'firstname' 	    => $driver['first_name'],
+            'lastname' 		    => $driver['last_name'],
+            'email' 		    => $driver['email_id'],
+            'phonenumber' 	    => $driver['phone_number'],
+            'licenceno' 	    => $driver['licence_no'],
+            'transmission_type' => $driver->transmissionType['transmission_type'],
+            'status'    	    => $driver['status'],
+            'address1'   	    => $driver->address['address1'],
+            'address2'   	    => $driver->address['address2'],
+            'city'   		    => $driver->address['city'],
+            'pincode'   	    => $driver->address['pincode'],
+            'state'  		    => $driver->address['state'],
+            'country'   	    => $driver->address['country']
         ];
     }
 }
