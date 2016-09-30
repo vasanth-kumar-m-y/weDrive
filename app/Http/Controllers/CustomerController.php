@@ -67,7 +67,7 @@ class CustomerController extends Controller
 
     		$inputs_array = $inputs;
 
-    		$customer = CustomerRegistration::where('email', '=', $inputs_array['email'])->where('password', '=', md5($inputs_array['password']))->first();
+    		$customer = CustomerRegistration::where('email', '=', $inputs_array['cred'])->orWhere('phone', '=', $inputs_array['cred'])->where('password', '=', md5($inputs_array['password']))->first();
 	        
         	if (!empty($customer)) {
         	
@@ -147,7 +147,7 @@ class CustomerController extends Controller
             
             if(empty($Checkcustomer))
             {
-                return $this->setStatusCode(404)->respondWithError("No customer exist with this Emailid");
+                return $this->setStatusCode(404)->respondWithError("No customer exist with this Email Id");
             }
             else
             {
@@ -172,16 +172,65 @@ class CustomerController extends Controller
                     $message->to($customer['receiver'], $customer['receiver'])->subject('Reset your password');
                 });*/
 
-                return $this->setStatusCode(200)->respond("An email has been sent to the registered emailid");
+                return $this->setStatusCode(200)->respond("An email has been sent to the registered email id");
 
             }
         } catch (Exception $e) {
 
-            return $e;//$this->setStatusCode(500)->respondWithError('Error occured! Please try later');
+            return $this->setStatusCode(500)->respondWithError('Error occured! Please try later');
         }
 
+    }
 
 
+    public function resetPassword()
+    {
+        try {
+
+            $input       = Input::all();
+            $inputArray  = $input['data'];
+            $NewPass     = $inputArray['Newpassword'];
+            $Code        = $inputArray['Code'];
+
+            $Checkcustomer   = DB::select('select id, email from users where md5(90*13+id) = ?', [$Code]);
+            $CheckcustomerID = $Checkcustomer[0]->id;
+            
+            if($Checkcustomer == null)
+            {
+                return $this->setStatusCode(404)->respondWithError("Customer Dosen't Exist");
+            }
+            else
+            {
+                $Encpt = md5($NewPass);
+
+                DB::table('customer_registration')
+                         ->where('id', $CheckcustomerID)
+                         ->update(array('password' => $Encpt));
+                
+
+                //Send email to user.
+                /*$customer = array(
+                        'sender'   => "admin@vdrive.com",
+                        'receiver' => $Checkcustomer[0]->email,
+                    );
+
+                $data = array(
+                        'email'  => $customerEmail
+                    );
+
+                Mail::send('emails.passwordChanged', $data, function($message) use ($customer)
+                {
+                    $message->from('admin@vdrive.com', 'Vdrive');
+                    $message->to($customer['receiver'], $customer['receiver'])->subject('Password Changed');
+                });*/
+
+                return $this->setStatusCode(200)->respond("Reset Password Successful");
+            }
+            
+        } catch (Exception $e) {
+
+            return $this->setStatusCode(500)->respondWithError('Error occured! Please try later');
+        }
     }
 
 }

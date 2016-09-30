@@ -3,7 +3,7 @@ namespace App\Models;
 
 class DriverRegistration extends \Eloquent {
 	protected $fillable = [];
-    public $timestamps  = false;
+    //public $timestamps  = false;
 	/**
 	 * The database table used by the model.
 	 *

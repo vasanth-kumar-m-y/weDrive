@@ -11,13 +11,15 @@ class DriveRequestRepository{
 	{
 	    $driveRequest = new DriveRequest();
 
-        $driveRequest->drive_code 	     = $generatedDriveCode;
-	    $driveRequest->customer_id 	     = $inputs_array['customer_id'];
-		$driveRequest->pickup_venue      = $inputs_array['pickup_venue'];
-		$driveRequest->drop_point 	     = $inputs_array['drop_point'];
-		$driveRequest->device_id 	     = $inputs_array['device_id'];
-		$driveRequest->booking_date_time = date('Y-m-d H:i:s');
-		$driveRequest->status 		     = "Requested";
+        $driveRequest->drive_code 	           = $generatedDriveCode;
+	    $driveRequest->customer_id 	           = $inputs_array['customer_id'];
+		$driveRequest->pub_id                  = $inputs_array['pub_id'];
+		$driveRequest->car_type_id 	           = $inputs_array['car_type_id'];
+        $driveRequest->transmission_id         = $inputs_array['transmission_id'];
+        $driveRequest->terms_and_cond_accepted = $inputs_array['terms_and_cond_accepted'];
+		$driveRequest->device_id 	           = $inputs_array['device_id'];
+		$driveRequest->booking_date_time       = date('Y-m-d H:i:s');
+		$driveRequest->status 		           = "Requested";
 
         $driveRequest-> save();
 

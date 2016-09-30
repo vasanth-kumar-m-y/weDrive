@@ -126,7 +126,7 @@ evezownApp
                 }
                 else {
                     usSpinnerService.spin('spinner-1');
-                   $http.post(PATHS.api_url + 'admin/addNewDriver'
+                   $http.post(PATHS.api_url + 'admin/registerDriver'
                         , {
                             data: {
                                 firstname: $scope.master.firstname,
@@ -227,7 +227,7 @@ evezownApp
          }
          else {
              usSpinnerService.spin('spinner-1');
-             $http.post(PATHS.api_url +  'admin/updateDriverInfo'
+             $http.post(PATHS.api_url +  'admin/registerDriver'
               , {
                             data: {
                                 firstname: $scope.master.firstname,
@@ -235,7 +235,7 @@ evezownApp
                                 email: $scope.master.email,
                                 phonenumber: $scope.master.phonenumber,
                                 licenceno: $scope.master.licenceno,
-                                cartype: $scope.master.cartype,
+                                transmission_type: $scope.master.cartype,
                                 address1: $scope.master.address1,
                                 address2: $scope.master.address2,
                                 city: $scope.master.city,

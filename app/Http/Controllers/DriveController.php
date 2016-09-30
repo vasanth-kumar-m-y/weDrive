@@ -114,61 +114,51 @@ class DriveController extends Controller
   
     
     /** Rit
-     * API for accepting the driver request and assigning the driver for the requested customer.
-     * POST /assignDriverForRide
-     * @param input
-     * @return Response
-     * @internal param $drive_request_id
-     */
-    public function assignDriverForRide()
-    {
-    	try {
-    		$inputs = Input::all();
-    		$inputs_array = $inputs['data'];
-    	    $driveId = $inputs_array['driveId'];
-    		
-    		$driveDetails = DriveRequest::find($driveId);
-    		$driveDetails->driver_id = $inputs_array['driverId'];
-    		$driveDetails->status = "Assigned";
-    		$driveDetails->save();
-    		
-    		//TEST
-    		
-    		/* $driveDetails = DriveRequest::find(3);
-    		$driveDetails->driver_id = 1;
-    		
-    		$driveDetails->save(); */
-    		
-    	} catch (Exception $e) {
-    		return $e;
-    		//return $this->setStatusCode(500)->respondWithError($e);
-    	}
-    	return $driveDetails;
-    }
-    
-    /** Rit
      * API for showing the latest status to the customer after booking.
      * GET /showBookingStatusForCustomer
      * @param input
      * @return Response
      * @internal param $driveDetails
      */
-    public function showBookingStatusForCustomer()
+    public function showBookingStatusForCustomer($customerId)
     {
     	try {
-    		$inputs = Input::all();
-    		$inputs_array = $inputs['data'];
-    		$driveId = $inputs_array['driveId'];
     	
-    		$driveDetails = DriverRequest::find($driveId);
-    		
+    		$driveDetails = DriveRequest::with('customer', 'pub')->where('customer_id', $customerId)->get();
     		
     	} catch (Exception $e) {
     
-    		return $this->setStatusCode(500)->respondWithError($e);
+    		$errorMessage = [
+                'status' => false,
+                'message' => $e
+            ];
+
+            return $this->setStatusCode(500)->respondWithError($errorMessage);
     	}
+
     	return $driveDetails;
     }
+
+
+    public function showAllBookingStatusForCustomer($customerId)
+    {
+        try {
+
+            $driveDetails = DriveRequest::with('customer', 'pub')->where('customer_id', $customerId)->get();
+            
+        } catch (Exception $e) {
+    
+            $errorMessage = [
+                'status' => false,
+                'message' => $e
+            ];
+
+            return $this->setStatusCode(500)->respondWithError($errorMessage);
+        }
+
+        return $driveDetails;
+    }
+
     
     /** Rit
      * API for showing the latest status to the driver about the customer.
@@ -177,24 +167,28 @@ class DriveController extends Controller
      * @return Response
      * @internal param $driveDetails
      */
-    public function showBookingStatusForDriver()
+    public function showBookingStatusForDriver($driverId)
     {
     	try {
-    		$inputs = Input::all();
-    		$inputs_array = $inputs['data'];
-    		$driveId = $inputs_array['driveId'];
     		 
-    		$driveDetails = DriverRequest::find($driveId);
+    		$driveDetails = DriveRequest::with('customer', 'pub')
+                                          ->where('driver_id', $driverId)
+                                          ->whereNotIn('status', ['Reqested', 'Completed'])
+                                          ->get();
     
     	} catch (Exception $e) {
     
-    		return $this->setStatusCode(500)->respondWithError($e);
+    		$errorMessage = [
+                'status' => false,
+                'message' => $e
+            ];
+
+            return $this->setStatusCode(500)->respondWithError($errorMessage);
     	}
+
     	return $driveDetails;
     }  
     
-     
-   
    
  
 }

@@ -5,6 +5,7 @@ use Input, DB, App, Config;
 use App\Models\DriverRegistration;
 use App\Repositories\DriverRegistrationRepository;
 use App\Http\Controllers\DriverRegistrationTransformer;
+use App\Models\DriveRequest;
 use Illuminate\Support\Facades\Mail;
 use League\Fractal\Manager;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
@@ -53,7 +54,12 @@ class AdminController extends Controller
     
     	} catch (Exception $e) {
     
-    		return $this->setStatusCode(500)->respondWithError($e);
+    		$errorMessage = [
+                'status'   => false,
+                'message'  => $e
+            ];
+    
+            return $this->setStatusCode(500)->respondWithError($errorMessage);
     	}
     
     	return $data->toJson();
@@ -138,17 +144,22 @@ class AdminController extends Controller
      * @return mixed
      * @internal param $input
      */
-    public function getDriverDetails($userId)
+    public function getDriverDetails($driverId)
     {
     	try {
 
-    		$users = DriverRegistration::with('address', 'transmissionType')->find($userId);
+    		$drivers = DriverRegistration::with('address', 'transmissionType')->find($driverId);
 
-    		return $users->toJson();
+    		return $drivers->toJson();
 
     	} catch (Exception $e) {
 
-    		return $this->setStatusCode(500)->respondWithError($e);
+    		$errorMessage = [
+                'status'   => false,
+                'message'  => $e
+            ];
+    
+            return $this->setStatusCode(500)->respondWithError($errorMessage);
     	}
     }
     
@@ -157,13 +168,13 @@ class AdminController extends Controller
      * @param $input
      * @return bool
      */
-    public function updateDriverInfo(){
+   /* public function updateDriverInfo(){
     	try {
     		
-    		$inputs = Input::all();
+    		$inputs       = Input::all();
     		$inputs_array = $inputs['data'];
     		
-    		$driverId = $inputs_array['driverId'];
+    		$driverId      = $inputs_array['driverId'];
     		
     		$driverDetails = DriverRegistration::with('address')->find($driverId);
     		
@@ -231,7 +242,7 @@ class AdminController extends Controller
     	} catch (Exception $e) {
     		return $e;
     	}
-    }
+    }*/
   
     /** Rit
      * API for fetching all the drive request placed by the customer.
@@ -266,6 +277,43 @@ class AdminController extends Controller
     
     	return $bokinglist->toJson();
     }
+
+
+    /** Rit
+     * API for accepting the driver request and assigning the driver for the requested customer.
+     * POST /assignDriverForRide
+     * @param input
+     * @return Response
+     * @internal param $drive_request_id
+     */
+    public function assignDriverForRide()
+    {
+        try {
+            $inputs       = Input::all();
+            $inputs_array = $inputs['data'];
+
+            $driveId      = $inputs_array['driveId'];
+            
+            $driveDetails = DriveRequest::find($driveId);
+
+            $driveDetails->driver_id = $inputs_array['driverId'];
+            $driveDetails->status    = "Assigned";
+
+            $driveDetails->save();
+            
+        } catch (Exception $e) {
+
+            $errorMessage = [
+                'status' => false,
+                'message' => $e
+            ];
+
+            return $this->setStatusCode(500)->respondWithError($errorMessage);
+        }
+
+        return $driveDetails;
+    }
+
 
    
  
