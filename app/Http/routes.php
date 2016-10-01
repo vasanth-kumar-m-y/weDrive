@@ -44,8 +44,8 @@ Route::group(['prefix' => 'v1', 'middleware' => 'cors'], function () {
 	Route::get('driver/getAllActiveDrivers', 'DriverController@getAllActiveDrivers');
 	
 	// ------------------------ CUSTOMER APP ROUTE -------------------------------
-	Route::get('customer/signup', 'CustomerController@signUp');
-	Route::get('customer/signin', 'CustomerController@signIn');
+	Route::post('customer/signup', 'CustomerController@signUp');
+	Route::post('customer/signin', 'CustomerController@signIn');
 	Route::post('customer/changepassword', 'CustomerController@changePassword');
 	Route::post('customer/forgotpassword', 'CustomerController@forgotPassword');
 	Route::post('customer/resetpassword', 'CustomerController@resetPassword');
