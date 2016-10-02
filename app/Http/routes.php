@@ -51,9 +51,9 @@ Route::group(['prefix' => 'v1', 'middleware' => 'cors'], function () {
 	Route::post('customer/resetpassword', 'CustomerController@resetPassword');
 
     //------------------------ DRIVE APP ROUTE -------------------------------
+    Route::post('customer/sendBookingRequest', 'DriveController@sendBookingRequest');
     Route::post('driver/startDrive', 'DriveController@startDrive');
 	Route::post('driver/endDrive', 'DriveController@endDrive');
-	Route::post('customer/sendBookingRequest', 'DriveController@sendBookingRequest');
 	Route::get('driver/bookingStatus/{driver_id}', 'DriveController@showBookingStatusForDriver');
 	Route::get('customer/allbookingStatus/{customer_id}', 'DriveController@showAllBookingStatusForCustomer');
 	Route::get('customer/bookingStatus/{customer_id}', 'DriveController@showBookingStatusForCustomer');

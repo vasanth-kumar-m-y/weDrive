@@ -123,8 +123,11 @@ class DriveController extends Controller
     public function showBookingStatusForCustomer($customerId)
     {
     	try {
-    	
-    		$driveDetails = DriveRequest::with('customer', 'pub')->where('customer_id', $customerId)->get();
+
+    		$driveDetails = DriveRequest::with('customer', 'pub')->where('customer_id', $customerId)
+                                                                 ->orderBy('created_at', 'DESC')
+                                                                 ->limit(5)
+                                                                 ->get();
     		
     	} catch (Exception $e) {
     
@@ -135,7 +138,7 @@ class DriveController extends Controller
 
             return $this->setStatusCode(500)->respondWithError($errorMessage);
     	}
-
+        
     	return $driveDetails;
     }
 
@@ -144,7 +147,9 @@ class DriveController extends Controller
     {
         try {
 
-            $driveDetails = DriveRequest::with('customer', 'pub')->where('customer_id', $customerId)->get();
+            $limit   = Input::get('limit') ?: 10;
+
+            $driveDetails = DriveRequest::with('customer', 'pub')->where('customer_id', $customerId)->paginate($limit);
             
         } catch (Exception $e) {
     
@@ -155,7 +160,7 @@ class DriveController extends Controller
 
             return $this->setStatusCode(500)->respondWithError($errorMessage);
         }
-
+        
         return $driveDetails;
     }
 
@@ -170,11 +175,13 @@ class DriveController extends Controller
     public function showBookingStatusForDriver($driverId)
     {
     	try {
+
+            $limit   = Input::get('limit') ?: 10;
     		 
     		$driveDetails = DriveRequest::with('customer', 'pub')
                                           ->where('driver_id', $driverId)
                                           ->whereNotIn('status', ['Reqested', 'Completed'])
-                                          ->get();
+                                          ->paginate($limit);
     
     	} catch (Exception $e) {
     
@@ -185,7 +192,7 @@ class DriveController extends Controller
 
             return $this->setStatusCode(500)->respondWithError($errorMessage);
     	}
-
+        
     	return $driveDetails;
     }  
     

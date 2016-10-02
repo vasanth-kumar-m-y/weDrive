@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Input, DB, App, Config;
+use Input, DB, App, Config, Mail;
 use App\Models\CustomerRegistration;
 use App\Repositories\CustomerRepository;
 
@@ -23,11 +23,11 @@ class CustomerController extends Controller
 
             $inputs = Input::all();
 
-            $inputs_array = $inputs;
+            $inputs_array = $inputs['data'];
 			
-            $isEmailExist = CustomerRegistration::where('email', $inputs_array['email'])->first();
+            $isEmailPhoneExist = CustomerRegistration::where('email', $inputs_array['email'])->orWhere('phone', '=', $inputs_array['phone'])->first();
                         
-            if (is_null($isEmailExist)) {
+            if (is_null($isEmailPhoneExist)) {
             	
             	$customer = $this->customerRepo->signUp($inputs_array);          	
             	
@@ -43,7 +43,11 @@ class CustomerController extends Controller
             		return $this->setStatusCode(500)->respondWithError("Customer registration failed.");
             	}
             }else{
-            	return $this->setStatusCode(500)->respondWithError("The account already exists with the e-mail: ".$inputs_array['email']);
+                if($isEmailPhoneExist->email == $inputs_array['email']){
+            	  return $this->setStatusCode(500)->respondWithError("The account already exists with the e-mail: ".$inputs_array['email']);
+                }else{
+                  return $this->setStatusCode(500)->respondWithError("The account already exists with the phone: ".$inputs_array['phone']);
+                }
             }
       
         } catch (Exception $e) {
@@ -65,7 +69,7 @@ class CustomerController extends Controller
 
     		$inputs = Input::all();
 
-    		$inputs_array = $inputs;
+    		$inputs_array = $inputs['data'];
 
     		$customer = CustomerRegistration::where('email', '=', $inputs_array['cred'])->orWhere('phone', '=', $inputs_array['cred'])->where('password', '=', md5($inputs_array['password']))->first();
 	        
@@ -102,7 +106,7 @@ class CustomerController extends Controller
 
             $inputs = Input::all();
 
-            $inputArray = $inputs;
+            $inputArray  = $inputs['data'];
 
             $customerid  = $inputArray['customerid'];
             $CurrentPass = $inputArray['current_password'];
@@ -140,7 +144,7 @@ class CustomerController extends Controller
 
             $inputs = Input::all();
 
-            $inputArray = $inputs;
+            $inputArray = $inputs['data'];
 
             $customerEmail = $inputArray['email'];
             $Checkcustomer = CustomerRegistration::where('email', $customerEmail)->first();
@@ -151,13 +155,12 @@ class CustomerController extends Controller
             }
             else
             {
-                //send link to mail
-                
+                //send reset pwd link to customer
+
                 /*$customerID = $Checkcustomer->id;
                 $Code       = md5(90*13+$customerID);
 
                 $customer = array(
-                        'sender'   => "admin@vdrive.com",
                         'receiver' => $customerEmail,
                     );
 
@@ -168,7 +171,7 @@ class CustomerController extends Controller
 
                 Mail::send('emails.forgotPassword', $data, function($message) use ($customer)
                 {
-                    $message->from('admin@vdrive.com', 'Vdrive');
+                    $message->from(Config::get('app.admin_email'), 'Vdrive');
                     $message->to($customer['receiver'], $customer['receiver'])->subject('Reset your password');
                 });*/
 
@@ -209,8 +212,8 @@ class CustomerController extends Controller
                 
 
                 //Send email to user.
+
                 /*$customer = array(
-                        'sender'   => "admin@vdrive.com",
                         'receiver' => $Checkcustomer[0]->email,
                     );
 

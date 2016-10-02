@@ -1,0 +1,65 @@
+<div class="container" ng-controller="LoginController">
+        <div class="row">
+            <div class="col-sm-12 col-md-8 col-md-8 col-lg-offset-2 col-md-offset-2">
+                <h1 class=" login-title">{{title}}</h1>
+                <div class="col-md-12 form-wall">
+                    <form class="form-invite"
+                          ng-submit="login(credentials)">
+                        <input type="email" class="form-control" id="LoginEmail" ng-model="credentials.email"  placeholder="Email" required autofocus>
+                        <input type="password" class="form-control" ng-model="credentials.password"  placeholder="Password" required>
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">
+                            Sign In
+                        </button>
+                        <div class="spinner-style">
+                            <span us-spinner="{radius:6, width:2, length: 2,color: '#ffffff'}" spinner-key="spinner-1"
+                              spinner-start-active="false">
+                            </span>
+                        </div>
+                        <div class="row" style="margin-top: 0px">
+                            <div class="col-md-5 left">
+                                <label for="chkRememberMe" style="color: #e50880; font-size: 14px; font-weight: 300">Remember Me</label>
+                                <input id="chkRememberMe" type="checkbox"  ng-model="credentials.remember"/>
+                            </div>
+                            <div class="col-md-4" style="padding: 0px">
+                                <a style="margin-top: -5px" href class="btn btn-link pull-left" ng-click="forgot()"><font style="color: #e50880; font-size: 14px; font-weight: 300">Forgot Password?</font></a>
+                            </div>
+                             <div class="col-md-3" style="padding: 0px">
+                                <a style="margin-top: -5px" href="#requestinvite" class="btn btn-link pull-right"><font style="color: #e50880; font-size: 14px; font-weight: 300">Sign Up</font></a>
+                            </div>
+                        </div>
+                    </form>
+                    <div align="center">
+                        <a class="btn btn-sm btn-social btn-google-plus" ng-click="authenticate('google')">
+                            <span class="fa fa-google"></span> Sign in with Google
+                        </a>
+                        <a class="btn btn-sm btn-social btn-facebook" ng-click="authenticate('facebook')">
+                            <span class="fa fa-facebook"></span> Sign in with Facebook
+                        </a>
+                        <a class="btn btn-sm btn-social btn-linkedin" ng-click="authenticate('linkedin')">
+                            <span class="fa fa-linkedin"></span> Sign in with LinkedIn
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+<script type="text/ng-template" id="templateId">
+    <div class="ngdialog-buttons popuptemplate" ng-controller="LoginController">
+        <h4>Forgot Password</h4>
+        <input class="form-control" type="text" placeholder="Email"
+               id="email" ng-model="email" style="margin-bottom: 10px; height: 40px; font-size: 16px"/>
+        <button class="btn primary pull-right form-control" type="button" ng-click="ResetPassword()">Send</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="EmailConfirmation">
+    <div class="ngdialog-buttons popuptemplate">
+        <br>
+        <div class="text-center">
+            <span class="glyphicon glyphicon-ok-circle" style="color:green;font-size:60px;"></span>
+        </div>
+        <div class="text-center"><h4>Check Your EMail</h4></div>
+
+        <h5 style="font-weight:200"> You will receive an email from us with instructions for resetting your password. If you dont receive this email, please check your junk mail folder.</h5><br>
+    </div>
+</script>

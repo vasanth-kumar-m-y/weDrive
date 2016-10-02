@@ -1,0 +1,102 @@
+<div class="container" ng-controller="SignupController">
+    <div class="row">
+        <div class="col-xs-12 col-sm-8 col-md-8 col-sm-offset-1 col-md-offset-2">
+            <div id="legend">
+                <legend class="">Register</legend>
+            </div>
+            <div class="signup-section" ng-controller="registerCtrl">
+                <form>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-8 col-md-6">
+                            <div class="form-group">
+                                <input type="text" name="first_name" id="first_name" class="form-control input-lg"
+                                       placeholder="Name" tabindex="1" ng-model="master.firstname" required>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-8 col-md-6">
+                            <div class="form-group">
+                                <input type="text" name="last_name" id="last_name" class="form-control input-lg"
+                                       placeholder="Surname" tabindex="2" ng-model="master.lastname" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-8 col-md-6">
+                            <div class="form-group">
+                                <input type="email" name="email" id="email" class="form-control input-lg"
+                                       placeholder="Email Address" tabindex="4" ng-model="master.emailId" required>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-8 col-md-6">
+                            <div class="form-group">
+                                <select ng-model="role" class="form-control input-lg"
+                                style="margin-bottom: 5px; height: 45px" default-option="User Type" required>
+                                    <option value="3">Business User</option>
+                                    <option value="2">Non-Business User</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-8 col-md-6">
+                            <div class="form-group">
+                                <input type="password" name="password" id="password" class="form-control input-lg"
+                                       placeholder="Password" tabindex="5" ng-model="master.password" required>
+                            </div>
+                            <!--<div ng-password-strength="password" strength="passwordStrength"> .... </div>-->
+                        </div>
+                        <div class="col-xs-12 col-sm-8 col-md-6">
+                            <div class="form-group">
+                                <input type="password" name="password_confirmation" id="password_confirmation"
+                                       class="form-control input-lg" placeholder="Confirm Password" tabindex="6" ng-model="master.cpassword" required>
+                            </div>
+                        </div>
+                        <ul id="strength" check-strength="master.password"></ul>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-8 col-md-6">
+                            <div class="form-group">
+                                <input type="number" name="phone" id="phone" class="form-control input-lg"
+                                       placeholder="Phone Number" tabindex="7" ng-model="master.phone" pattern=".{10,15}">
+
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-8 col-md-6">
+                            <div class="form-group">
+                                <input type="code" name="code" id="code" class="form-control input-lg"
+                                       placeholder="Invite code" tabindex="8" ng-model="master.code">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 checkbox checkbox-primary">
+                            <input type="checkbox" name="t_and_c" id="t_and_c" value="1" ng-model="master.tandc"/>
+                            <label for="t_and_c">
+                                By clicking <strong>Register</strong>, i agree to the <a
+                                    href="#terms" target="_blank">Terms and Conditions</a> set out
+                                by this site, including our Cookie Use
+                            </label>
+                        </div>
+                    </div>
+                    <input type="hidden" class="form-control input-lg"
+                     tabindex="8" ng-model="master.referrer_email">
+                    <span us-spinner="{radius:6, width:2, length: 2,color: '#e50880'}" spinner-key="spinner-1" ></span>
+                    <div class="row">
+                        <div class="col-xs-12 col-md-8 col-md-offset-2" style="margin-top: 10px">
+                            <button
+                                   class="btn btn-primary btn-block btn-lg"
+                                   tabindex="7" ng-click="RegisterUser(master)">Register</button>
+                        </div>
+                    </div>
+                    <div class="row text-center">
+                        <a href="#login" class="btn btn-link">Back to Login</b></a>
+                    </div>
+
+                </form>
+                <!--<pre>form = {{user | json}}</pre>-->
+                <!--<pre>master = {{master | json}}</pre>-->
+            </div>
+        </div>
+    </div>
+
+</div>

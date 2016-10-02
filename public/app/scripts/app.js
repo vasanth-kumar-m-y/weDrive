@@ -54,6 +54,15 @@ evezownApp.config(function ($routeProvider, $stateProvider, $urlRouterProvider, 
             .when('/report', {
                 templateUrl: 'partials/admin/reports.html'
             });
+
+            $routeProvider
+            .when('/reset_password/:Code', {
+                templateUrl: 'partials/home/reset_password.html',
+                controller: 'ResetPassword',
+                data: {
+                    authorizedRoles: [USER_ROLES.admin, USER_ROLES.moderator, USER_ROLES.guest]
+                }
+            });
 	        
 	     <!-- Ends here -->
  

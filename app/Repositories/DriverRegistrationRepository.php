@@ -31,7 +31,7 @@ class DriverRegistrationRepository{
 	      $driverRegistration->last_name              =  $inputs_array['lastname'];
 	      $driverRegistration->phone_number 	        =  $inputs_array['phonenumber'];
 	      $driverRegistration->email_id 	        =  $inputs_array['email'];
-            $driverRegistration->status                 =  "Offline";
+            $driverRegistration->status                 =  $inputs_array['status'];
             $driverRegistration->licence_no             =  $inputs_array['licenceno'];
 	      $driverRegistration->transmission_type_id   =  $inputs_array['transmission_type'];
             $driverRegistration->profile_image          =  $inputs_array['profile_image'];
