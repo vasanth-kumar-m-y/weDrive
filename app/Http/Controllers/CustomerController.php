@@ -32,33 +32,45 @@ class CustomerController extends Controller
             	$customer = $this->customerRepo->signUp($inputs_array);          	
             	
             	if ($customer->id) {
-            	
-            		$successResponse = [
-            		   'status'  => true,
-            		   'message' => 'Customer registered successfully!'
-            		];
-            		return $this->setStatusCode(200)->respond($successResponse);
-            	
+            	     $response = [
+                       'status'  => true,
+                       'code' => 200,
+                       'message' => 'Customer registered successfully!'
+                     ];
+                    return json_encode($response);
             	} else {
-            		return $this->setStatusCode(500)->respondWithError("Customer registration failed.");
+            		$response = [
+                       'status'  => false,
+                       'code' => 401,
+                       'message' => 'Customer registration failed.'
+                     ];
+                    return json_encode($response);
             	}
             }else{
                 if($isEmailPhoneExist->email == $inputs_array['email']){
-            	  return $this->setStatusCode(500)->respondWithError("The account already exists with the e-mail: ".$inputs_array['email']);
+            	   $response = [
+                       'status'  => false,
+                       'code' => 401,
+                       'message' => 'The account already exists with the e-mail id: '.$inputs_array['email']
+                     ];
+                    return json_encode($response);
                 }else{
-                  return $this->setStatusCode(500)->respondWithError("The account already exists with the phone: ".$inputs_array['phone']);
+                   $response = [
+                       'status'  => false,
+                       'code' => 401,
+                       'message' => 'The account already exists with the phone number: '.$inputs_array['phone']
+                     ];
+                    return json_encode($response);
                 }
             }
       
         } catch (Exception $e) {
-
-            $errorMessage = [
-                'status' => false,
-                'message' => $e
-            ];
-
-            return $this->setStatusCode(500)->respondWithError($errorMessage);
-
+            $response = [
+                       'status'  => false,
+                       'code' => 501,
+                       'message' =>  'Error occured! Please try later'
+                     ];
+            return json_encode($response);
         }
     }
 
@@ -74,26 +86,29 @@ class CustomerController extends Controller
     		$customer = CustomerRegistration::where('email', '=', $inputs_array['cred'])->orWhere('phone', '=', $inputs_array['cred'])->where('password', '=', md5($inputs_array['password']))->first();
 	        
         	if (!empty($customer)) {
-        	
-        		$successResponse = [
-        		   'status'  => true,
-        		   'message' => 'Customer authenticate successfully!'
-        		];
-
-        		return $this->setStatusCode(200)->respond($successResponse);
+        	       $response = [
+                       'status'  => true,
+                       'code' => 200,
+                       'message' => 'Customer authenticated successfully!'
+                     ];
+                    return json_encode($response);
         	
         	} else {
-        		return $this->setStatusCode(500)->respondWithError("Customer authenticate failed.");
+        		 $response = [
+                       'status'  => false,
+                       'code' => 401,
+                       'message' => 'Customer authentication failed.'
+                     ];
+                    return json_encode($response);
         	}
 
     	}catch(Exception $e){
-
-    		$errorMessage = [
-                'status' => false,
-                'message' => $e
-            ];
-
-            return $this->setStatusCode(500)->respondWithError($errorMessage);
+    		$response = [
+                       'status'  => false,
+                       'code' => 501,
+                       'message' =>  'Error occured! Please try later'
+                     ];
+            return json_encode($response);
 
     	}
               
@@ -124,16 +139,28 @@ class CustomerController extends Controller
                          ->where('id', $customerid)
                          ->update(array('password' => md5($NewPass)));
 
-                return $this->setStatusCode(200)->respond("Password Changed Successfully");
-            
+                $response = [
+                       'status'  => true,
+                       'code' => 200,
+                       'message' => 'Password Changed Successfully'
+                     ];
+                    return json_encode($response);
             }else{
-
-                return $this->setStatusCode(404)->respondWithError("Invalid Old Password");
+                   $response = [
+                       'status'  => false,
+                       'code' => 401,
+                       'message' => 'Invalid Old Password'
+                     ];
+                    return json_encode($response);
             }
             
         } catch (Exception $e) {
-
-            return $this->setStatusCode(500)->respondWithError('Error occured! Please try later');
+             $response = [
+                       'status'  => false,
+                       'code' => 501,
+                       'message' => 'Error occured! Please try later'
+                     ];
+            return json_encode($response);
         }
     }
 
@@ -151,7 +178,12 @@ class CustomerController extends Controller
             
             if(empty($Checkcustomer))
             {
-                return $this->setStatusCode(404)->respondWithError("No customer exist with this Email Id");
+                 $response = [
+                       'status'  => false,
+                       'code' => 401,
+                       'message' => 'No customer exist with this Email Id'
+                     ];
+                    return json_encode($response);
             }
             else
             {
@@ -175,12 +207,20 @@ class CustomerController extends Controller
                     $message->to($customer['receiver'], $customer['receiver'])->subject('Reset your password');
                 });*/
 
-                return $this->setStatusCode(200)->respond("An email has been sent to the registered email id");
-
+                 $response = [
+                       'status'  => true,
+                       'code' => 200,
+                       'message' => 'An email has been sent to the registered email id'
+                     ];
+                    return json_encode($response);    
             }
         } catch (Exception $e) {
-
-            return $this->setStatusCode(500)->respondWithError('Error occured! Please try later');
+                   $response = [
+                       'status'  => false,
+                       'code' => 501,
+                       'message' => 'Error occured! Please try later'
+                     ];
+                    return json_encode($response);    
         }
 
     }
@@ -200,7 +240,12 @@ class CustomerController extends Controller
             
             if($Checkcustomer == null)
             {
-                return $this->setStatusCode(404)->respondWithError("Customer Dosen't Exist");
+                $response = [
+                       'status'  => false,
+                       'code' => 401,
+                       'message' => 'Customer Dosent Exist'
+                     ];
+                    return json_encode($response);  
             }
             else
             {
@@ -227,12 +272,22 @@ class CustomerController extends Controller
                     $message->to($customer['receiver'], $customer['receiver'])->subject('Password Changed');
                 });*/
 
-                return $this->setStatusCode(200)->respond("Reset Password Successful");
+                $response = [
+                       'status'  => true,
+                       'code' => 200,
+                       'message' => 'Reset Password Successful'
+                     ];
+                    return json_encode($response);  
             }
             
         } catch (Exception $e) {
 
-            return $this->setStatusCode(500)->respondWithError('Error occured! Please try later');
+            $response = [
+                       'status'  => false,
+                       'code' => 501,
+                       'message' => 'Error occured! Please try later'
+                     ];
+            return json_encode($response);  
         }
     }
 

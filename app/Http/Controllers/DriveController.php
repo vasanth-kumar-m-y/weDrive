@@ -36,21 +36,37 @@ class DriveController extends Controller
     	try {
     		 
             $inputs       = Input::all();
+            $inputs_array = $inputs['data'];
+            
+            $generatedDriveCode = "pubdrv-".bin2hex(openssl_random_pseudo_bytes(2));//16
 
-            $inputs_array = $inputs;
+             
+            $driveRequest = $this->driveRequest->saveBookingRequest($generatedDriveCode, $inputs_array);
 
-            $generatedDriveCode = "VDR".bin2hex(openssl_random_pseudo_bytes(2));//16
-
-            return $this->driveRequest->saveBookingRequest($generatedDriveCode, $inputs_array);
-    	
+            if ($driveRequest->id) {
+                 $response = [
+                       'status'  => true,
+                       'code' => 200,
+                       'data' => $driveRequest,
+                       'message' => 'Booking request sent successfully!'
+                     ];
+                    return json_encode($response);
+            }else{
+                   $response = [
+                       'status'  => false,
+                       'code' => 401,
+                       'message' => 'Booking request failed'
+                     ];
+                    return json_encode($response); 
+            }
+    	  
     	} catch (Exception $e) {
-    
-    		$errorMessage = [
-                'status' => false,
-                'message' => $e
-            ];
-
-            return $this->setStatusCode(500)->respondWithError($errorMessage);
+            $response = [
+                       'status'  => false,
+                       'code' => 501,
+                       'message' => 'Error occured! Please try later'
+                     ];
+            return json_encode($response); 
     	}
     	
     }
@@ -68,18 +84,33 @@ class DriveController extends Controller
     
             $inputs       = Input::all();
 
-            $inputs_array = $inputs;
+             $inputs_array = $inputs['data'];
 
-            return $this->driveRequest->updateStartDriveTime($inputs_array);
-    
+            $driveRequest =  $this->driveRequest->updateStartDriveTime($inputs_array);
+            if ($driveRequest->id) {
+                 $response = [
+                       'status'  => true,
+                       'code' => 200,
+                       'data' => $driveRequest,
+                       'message' => 'Drive started successfully!'
+                     ];
+                    return json_encode($response);
+            }else{
+                   $response = [
+                       'status'  => false,
+                       'code' => 401,
+                       'message' => 'Failed while starting the drive'
+                     ];
+                    return json_encode($response); 
+            }
         } catch (Exception $e) {
     
-            $errorMessage = [
-                'status' => false,
-                'message' => $e
-            ];
-
-            return $this->setStatusCode(500)->respondWithError($errorMessage);
+            $response = [
+                       'status'  => false,
+                       'code' => 501,
+                       'message' => 'Error occured! Please try later'
+                     ];
+            return json_encode($response); 
         }
     }
     
@@ -96,18 +127,34 @@ class DriveController extends Controller
 
             $inputs          = Input::all();
 
-            $inputs_array    = $inputs;
+            $inputs_array = $inputs['data'];
 
-            return $this->driveRequest->updateEndDriveTime($inputs_array);
+            $driveRequest =  $this->driveRequest->updateEndDriveTime($inputs_array);
+            if ($driveRequest->id) {
+                 $response = [
+                       'status'  => true,
+                       'code' => 200,
+                       'data' => $driveRequest,
+                       'message' => 'Drive ended successfully!'
+                     ];
+                    return json_encode($response);
+            }else{
+                   $response = [
+                       'status'  => false,
+                       'code' => 401,
+                       'message' => 'Failed while ending the drive'
+                     ];
+                    return json_encode($response); 
+            }
        
         } catch (Exception $e) {
     
-            $errorMessage = [
-                'status' => false,
-                'message' => $e
-            ];
-
-            return $this->setStatusCode(500)->respondWithError($errorMessage);
+            $response = [
+                       'status'  => false,
+                       'code' => 501,
+                       'message' => 'Error occured! Please try later'
+                     ];
+            return json_encode($response);
         }
         
     }
@@ -128,18 +175,33 @@ class DriveController extends Controller
                                                                  ->orderBy('created_at', 'DESC')
                                                                  ->limit(5)
                                                                  ->get();
+            if ($driveDetails->count() > 0) {
+                 $response = [
+                       'status'  => true,
+                       'code' => 200,
+                       'data' => $driveDetails,
+                       'message' => 'Booking status fetched successfully!'
+                     ];
+                    return json_encode($response);
+            }else{
+                   $response = [
+                       'status'  => false,
+                       'code' => 401,
+                       'message' => 'There is no record found'
+                     ];
+                    return json_encode($response); 
+            }                                                     
     		
     	} catch (Exception $e) {
     
-    		$errorMessage = [
-                'status' => false,
-                'message' => $e
-            ];
-
-            return $this->setStatusCode(500)->respondWithError($errorMessage);
+    		$response = [
+                       'status'  => false,
+                       'code' => 501,
+                       'message' => 'Error occured! Please try later'
+                     ];
+            return json_encode($response);
     	}
         
-    	return $driveDetails;
     }
 
 
@@ -150,18 +212,29 @@ class DriveController extends Controller
             $limit   = Input::get('limit') ?: 10;
 
             $driveDetails = DriveRequest::with('customer', 'pub')->where('customer_id', $customerId)->paginate($limit);
+
+
+            if ($driveDetails->count() > 0) {
+                return $driveDetails;
+            }else{
+                   $response = [
+                       'status'  => false,
+                       'code' => 401,
+                       'message' => 'There is no record found'
+                     ];
+                    return json_encode($response); 
+            }        
             
         } catch (Exception $e) {
     
-            $errorMessage = [
-                'status' => false,
-                'message' => $e
-            ];
-
-            return $this->setStatusCode(500)->respondWithError($errorMessage);
+            $response = [
+                       'status'  => false,
+                       'code' => 501,
+                       'message' => 'Error occured! Please try later'
+                     ];
+            return json_encode($response);
         }
-        
-        return $driveDetails;
+
     }
 
     
@@ -175,25 +248,38 @@ class DriveController extends Controller
     public function showBookingStatusForDriver($driverId)
     {
     	try {
-
-            $limit   = Input::get('limit') ?: 10;
     		 
     		$driveDetails = DriveRequest::with('customer', 'pub')
                                           ->where('driver_id', $driverId)
-                                          ->whereNotIn('status', ['Reqested', 'Completed'])
-                                          ->paginate($limit);
+                                          ->whereNotIn('status', ['Reqested', 'Completed']);
+
+            if ($driveDetails->count() > 0) {
+                 $response = [
+                       'status'  => true,
+                       'code' => 200,
+                       'data' => $driveDetails,
+                       'message' => 'Booking status fetched successfully!'
+                     ];
+                    return json_encode($response);
+            }else{
+                   $response = [
+                       'status'  => false,
+                       'code' => 401,
+                       'message' => 'There is no record found'
+                     ];
+                    return json_encode($response); 
+            }                                  
     
     	} catch (Exception $e) {
     
-    		$errorMessage = [
-                'status' => false,
-                'message' => $e
-            ];
-
-            return $this->setStatusCode(500)->respondWithError($errorMessage);
+    		$response = [
+                       'status'  => false,
+                       'code' => 501,
+                       'message' => 'Error occured! Please try later'
+                     ];
+            return json_encode($response);;
     	}
-        
-    	return $driveDetails;
+
     }  
     
    
