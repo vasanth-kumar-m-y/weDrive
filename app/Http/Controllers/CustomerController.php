@@ -35,7 +35,7 @@ class CustomerController extends Controller
             	     $response = [
                        'status'  => true,
                        'code' => 200,
-                       'message' => 'Customer registered successfully!'
+                       'customer' => $customer
                      ];
                     return json_encode($response);
             	} else {
@@ -83,15 +83,15 @@ class CustomerController extends Controller
 
     		$inputs_array = $inputs['data'];
 
-    		$customer = CustomerRegistration::where('email', '=', $inputs_array['cred'])->orWhere('phone', '=', $inputs_array['cred'])->where('password', '=', md5($inputs_array['password']))->first();
+    		$customer = CustomerRegistration::where('password', '=', md5($inputs_array['password']))->where('email', '=', $inputs_array['cred'])->orWhere('phone', '=', $inputs_array['cred'])->first();
 	        
         	if (!empty($customer)) {
         	       $response = [
                        'status'  => true,
                        'code' => 200,
-                       'message' => 'Customer authenticated successfully!'
+                       'customer' => $customer
                      ];
-                    return json_encode($response);
+                    return $response;
         	
         	} else {
         		 $response = [
@@ -99,7 +99,7 @@ class CustomerController extends Controller
                        'code' => 401,
                        'message' => 'Customer authentication failed.'
                      ];
-                    return json_encode($response);
+                    return $response;
         	}
 
     	}catch(Exception $e){
@@ -290,6 +290,34 @@ class CustomerController extends Controller
             return json_encode($response);  
         }
     }
+
+
+    public function signOut($id)
+    {
+
+      try {
+
+        $customer = CustomerRegistration::find($id);
+
+        $response =  [
+                       'status'  => true,
+                       'code'    => 200,
+                       'message' => 'Logged out successfully!'
+                     ];
+                    return json_encode($response);
+
+        } catch (Exception $e) {
+
+            $response = [
+                       'status'  => false,
+                       'code' => 501,
+                       'message' => 'Error occured! Please try later'
+                     ];
+
+            return json_encode($response);  
+        }
+    }
+
 
 }
 

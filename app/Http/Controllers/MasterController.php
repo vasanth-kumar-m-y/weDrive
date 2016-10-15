@@ -30,13 +30,20 @@ class MasterController extends Controller
         try{
 
             $pubs = PubMaster::get();
+             $successResponse = $pubs;
+               //  'status' => true,
+                // 'pubs'   => $pubs,
+            // ];
 
-            $successResponse = [
+           // return $this->setStatusCode(200)->respond($successResponse);
+            return $this->respond($successResponse);
+
+            /*$successResponse = [
                  'status' => true,
                  'pubs'   => $pubs,
              ];
 
-            return $this->setStatusCode(200)->respond($successResponse);
+            return $this->setStatusCode(200)->respond($successResponse);*/
 
         }catch(Exception $e){
 

@@ -21,4 +21,16 @@ class DriveRequest extends \Eloquent {
     }
 
 
+    public function driver()
+    {
+        return $this->hasOne('App\Models\DriverRegistration', 'id', 'driver_id');
+    }
+
+
+    public function billing()
+    {
+        return $this->belongsTo('App\Models\Billing', 'id', 'drive_request_id');
+    }
+
+
 }

@@ -22,13 +22,11 @@ Route::get('/', function () {
 
 Route::group(['prefix' => 'v1', 'middleware' => 'cors'], function () {
 
-	//Rit
 	// ------------------------ ADMIN APP ROUTE ----------------------------------
 	Route::get('admin/getAllDrivers', 'AdminController@getRegisteredDrivers');
 	Route::post('admin/registerDriver', 'AdminController@driverRegistration');
 	Route::post('admin/deleteDriver', 'AdminController@DeleteDriver');
 	Route::get('admin/{user_id}/getDriverDetails', 'AdminController@getDriverDetails');
-	//Route::post('admin/updateDriverInfo', 'AdminController@updateDriverInfo');
 	Route::get('admin/getAllDriveRequest', 'AdminController@getAllDriveRequest');
 	Route::post('admin/assignDriverForRide', 'AdminController@assignDriverForRide');
 
@@ -40,7 +38,8 @@ Route::group(['prefix' => 'v1', 'middleware' => 'cors'], function () {
 	Route::get('master/getStateByCountry/{country_id}', 'MasterController@getAllStatesByCountry');
 	
 	// ------------------------ DRIVER APP ROUTE --------------------------------
-	Route::get('driver/validateDriver/{driver_code}', 'DriverController@validateDriverLogin');
+	Route::post('driver/signin', 'DriverController@driverSignIn');
+	Route::get('driver/{driver_code}/signout', 'DriverController@driverSignOut');
 	Route::get('driver/getAllActiveDrivers', 'DriverController@getAllActiveDrivers');
 	
 	// ------------------------ CUSTOMER APP ROUTE -------------------------------
@@ -49,6 +48,7 @@ Route::group(['prefix' => 'v1', 'middleware' => 'cors'], function () {
 	Route::post('customer/changepassword', 'CustomerController@changePassword');
 	Route::post('customer/forgotpassword', 'CustomerController@forgotPassword');
 	Route::post('customer/resetpassword', 'CustomerController@resetPassword');
+	Route::get('customer/{customer_id}/signout', 'CustomerController@signOut');
 
     //------------------------ DRIVE APP ROUTE -------------------------------
     Route::post('customer/sendBookingRequest', 'DriveController@sendBookingRequest');

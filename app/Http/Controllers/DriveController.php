@@ -51,6 +51,7 @@ class DriveController extends Controller
                        'message' => 'Booking request sent successfully!'
                      ];
                     return json_encode($response);
+                    //return $response;
             }else{
                    $response = [
                        'status'  => false,
@@ -84,9 +85,10 @@ class DriveController extends Controller
     
             $inputs       = Input::all();
 
-             $inputs_array = $inputs['data'];
-
+            $inputs_array = $inputs['data'];
+            
             $driveRequest =  $this->driveRequest->updateStartDriveTime($inputs_array);
+
             if ($driveRequest->id) {
                  $response = [
                        'status'  => true,
@@ -127,9 +129,10 @@ class DriveController extends Controller
 
             $inputs          = Input::all();
 
-            $inputs_array = $inputs['data'];
+            $inputs_array    = $inputs['data'];
 
             $driveRequest =  $this->driveRequest->updateEndDriveTime($inputs_array);
+
             if ($driveRequest->id) {
                  $response = [
                        'status'  => true,
@@ -171,10 +174,12 @@ class DriveController extends Controller
     {
     	try {
 
-    		$driveDetails = DriveRequest::with('customer', 'pub')->where('customer_id', $customerId)
-                                                                 ->orderBy('created_at', 'DESC')
-                                                                 ->limit(5)
-                                                                 ->get();
+    		$driveDetails = DriveRequest::with('customer', 'pub', 'driver', 'billing')
+                                      ->where('customer_id', $customerId)
+                                      ->orderBy('created_at', 'DESC')
+                                      ->limit(5)
+                                      ->get();
+
             if ($driveDetails->count() > 0) {
                  $response = [
                        'status'  => true,
@@ -211,12 +216,24 @@ class DriveController extends Controller
 
             $limit   = Input::get('limit') ?: 10;
 
-            $driveDetails = DriveRequest::with('customer', 'pub')->where('customer_id', $customerId)->paginate($limit);
+            $driveDetails = DriveRequest::with('customer', 'pub', 'driver', 'billing')
+                                          ->where('customer_id', $customerId)
+                                          ->paginate($limit);
 
 
             if ($driveDetails->count() > 0) {
-                return $driveDetails;
-            }else{
+              //$response = [$driveDetails];
+               /*$response = [
+                       'status'  => true,
+                       'code' => 200,
+                       $driveDetails
+                     ]; */
+
+
+               // return $response;
+               // return $this->setStatusCode(200)->respond($driveDetails);
+               return $driveDetails;
+             }else{
                    $response = [
                        'status'  => false,
                        'code' => 401,
@@ -229,7 +246,7 @@ class DriveController extends Controller
     
             $response = [
                        'status'  => false,
-                       'code' => 501,
+                       'code'    => 501,
                        'message' => 'Error occured! Please try later'
                      ];
             return json_encode($response);
@@ -251,7 +268,8 @@ class DriveController extends Controller
     		 
     		$driveDetails = DriveRequest::with('customer', 'pub')
                                           ->where('driver_id', $driverId)
-                                          ->whereNotIn('status', ['Reqested', 'Completed']);
+                                          ->whereNotIn('status', ['Reqested', 'Completed'])
+                                          ->get();
 
             if ($driveDetails->count() > 0) {
                  $response = [

@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use Input, DB, App, Config;
 use App\Models\DriveRequest;
+use App\Models\Billing;
 
 class DriveRequestRepository{
 
@@ -32,7 +33,8 @@ class DriveRequestRepository{
           
         $driveRequest = DriveRequest::find($inputs_array['driveId']);
 
-        $driveRequest->drive_start_time = date("Y-m-d H:i:s");          
+        $driveRequest->drive_start_time = date("Y-m-d H:i:s"); 
+        $driveRequest->status           = "Started";         
 
         $driveRequest-> save();
 
@@ -44,11 +46,17 @@ class DriveRequestRepository{
 	{
 	    $driveRequest = DriveRequest::find($inputs_array['driveId']);
         
-        $driveRequest->drive_end_time   = date("Y-m-d H:i:s");
+        $driveRequest->drive_end_time    = date("Y-m-d H:i:s");
+        $driveRequest->status            = "Ended";
 
-        $driveRequest->total_drive_rate = $this->findTotalDriveRateAmount($driveRequest);
+        $total_time_rate_charge = $this->findTotalDriveRateAmount($driveRequest);
+
+        $driveRequest->total_travel_time = $total_time_rate_charge[0];
+        $driveRequest->total_drive_rate  = $total_time_rate_charge[1];
 
         $driveRequest-> save();
+
+        $this->saveBillingDetails($driveRequest, $total_time_rate_charge);
 
         return $driveRequest;
 	}
@@ -84,7 +92,7 @@ class DriveRequestRepository{
 
                 return $this->calculateCharges(100, $this->calculateTotalMinutes($driveDetails), 2.5);
 
-            }else if($driveStartedHour >= $nightFrom && $driveStartedHour < $nightTo){
+            }else if($driveStartedHour >= $nightFrom && $driveStartedHour > $nightTo){
 
                 return $this->calculateCharges(250, $this->calculateTotalMinutes($driveDetails), 4);
 
@@ -147,7 +155,30 @@ class DriveRequestRepository{
             return $this->setStatusCode(500)->respondWithError($errorMessage);
         }
 
-        return $totalCalculatedAmount;
+        return [$totalMinutes, $totalCalculatedAmount, $ratePerMinutes];
+    }
+
+
+    public function saveBillingDetails($driveDetails, $total_time_rate_charge)
+    {
+
+        $billing = Billing::where('drive_request_id', '=', $driveDetails->id)->first();
+
+        if (!empty($billing)) 
+        {
+          $billing = Billing::find($billing->id);
+        }else{
+          $billing = new Billing();
+        }
+
+        $billing->drive_request_id = $driveDetails->id;
+        $billing->price_breakup    = '';
+        $billing->quantity         = $driveDetails->total_travel_time;
+        $billing->unit_price       = $total_time_rate_charge[2];
+        $billing->total_price      = $driveDetails->total_drive_rate;
+        
+        $billing-> save();
+
     }
 
 }
