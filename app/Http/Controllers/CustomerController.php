@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Input, DB, App, Config, Mail;
 use App\Models\CustomerRegistration;
 use App\Repositories\CustomerRepository;
-
+use App\Http\Controllers\view;
 
 class CustomerController extends Controller
 {
@@ -194,10 +194,16 @@ class CustomerController extends Controller
             }
             else
             {
-                //send reset pwd link to customer
+                //generate new pwd and send mail to customer
 
                 /*$customerID = $Checkcustomer->id;
-                $Code       = md5(90*13+$customerID);
+                $newPwd     = $this->getUniquePwd(9, $customerID);
+               
+                $Encpt = md5($newPwd);
+
+                DB::table('customer_registration')
+                         ->where('id', $customerID)
+                         ->update(array('password' => $Encpt));
 
                 $customer = array(
                         'receiver' => $customerEmail,
@@ -205,13 +211,13 @@ class CustomerController extends Controller
 
                 $data = array(
                         'email'  => $customerEmail,
-                        'Code'   => $Code,
+                        'newPwd' => $newPwd,
                     );
 
                 Mail::send('emails.forgotPassword', $data, function($message) use ($customer)
                 {
                     $message->from(Config::get('app.admin_email'), 'Vdrive');
-                    $message->to($customer['receiver'], $customer['receiver'])->subject('Reset your password');
+                    $message->to($customer['receiver'], $customer['receiver'])->subject('Your New Password');
                 });*/
 
                  $response = [
@@ -219,8 +225,10 @@ class CustomerController extends Controller
                        'code' => 200,
                        'message' => 'An email has been sent to the registered email id'
                      ];
-                    return json_encode($response);    
+
+                return json_encode($response);    
             }
+
         } catch (Exception $e) {
                    $response = [
                        'status'  => false,
@@ -233,7 +241,31 @@ class CustomerController extends Controller
     }
 
 
-    public function resetPassword()
+    public function getUniquePwd($size, $customerID)
+    {
+
+        $alpha_key = '';
+        $keys = range('A', 'Z');
+
+        for ($i = 0; $i < 2; $i++) {
+          $alpha_key .= $keys[array_rand($keys)];
+        }
+
+        $length = $size - 2;
+
+        $key = '';
+        $keys = range(0, 9);
+
+        for ($i = 0; $i < $length; $i++) {
+          $key .= $keys[array_rand($keys)];
+        }
+
+        return $alpha_key . $customerID . $key;
+
+    }
+
+
+    /*public function resetPassword()
     {
         try {
 
@@ -265,7 +297,7 @@ class CustomerController extends Controller
 
                 //Send email to user.
 
-                /*$customer = array(
+                $customer = array(
                         'receiver' => $Checkcustomer[0]->email,
                     );
 
@@ -277,7 +309,7 @@ class CustomerController extends Controller
                 {
                     $message->from('admin@vdrive.com', 'Vdrive');
                     $message->to($customer['receiver'], $customer['receiver'])->subject('Password Changed');
-                });*/
+                });
 
                 $response = [
                        'status'  => true,
@@ -296,7 +328,7 @@ class CustomerController extends Controller
                      ];
             return json_encode($response);  
         }
-    }
+    }*/
 
 
     public function signOut($id)

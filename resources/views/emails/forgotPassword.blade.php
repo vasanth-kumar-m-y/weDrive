@@ -28,12 +28,11 @@
                         <div style="max-width:100%;margin:0 auto;padding:0 6px">
                             <div style="background:white;border-radius:0.5rem;padding:2rem;margin-bottom:1rem">
                                 <p>Hi, {{$email}}</p>
-                                <p>Reset Your Password</p>
-                                <p>You requested to reset your password for your Vdrive App.</p>
-                                <p>Click the link below to reset your password:</p>
-                                <a href="<?php echo Config::get('app.vdrive_url'); ?>/reset_password/{{$Code}}">Click Here, To Reset Your Password</a>
+                                <p>Your New Password</p>
+                                <p>You requested forgot password for your Vdrive App.</p>
+                                <p>Your New Password:</p>
+                                <p><b>{{$Code}}</b></p>
                                 <p>If you did not make this request, you can safely ignore this email. Rest assured your account is safe.</p>
-                                <p>If clicking the link doesn't seem to work, you can copy and paste the link on your browser address window.</p>
                                 <p>Questions? Contact Vdrive Support.</p>
                             </div>
 

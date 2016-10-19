@@ -47,7 +47,7 @@ Route::group(['prefix' => 'v1', 'middleware' => 'cors'], function () {
 	Route::post('customer/signin', 'CustomerController@signIn');
 	Route::post('customer/changepassword', 'CustomerController@changePassword');
 	Route::post('customer/forgotpassword', 'CustomerController@forgotPassword');
-	Route::post('customer/resetpassword', 'CustomerController@resetPassword');
+	/*Route::post('customer/resetpassword', 'CustomerController@resetPassword');*/
 	Route::get('customer/{customer_id}/signout', 'CustomerController@signOut');
 
     //------------------------ DRIVE APP ROUTE -------------------------------
