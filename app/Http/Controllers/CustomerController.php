@@ -12,7 +12,7 @@ class CustomerController extends Controller
 
     public function __construct(CustomerRepository $customerRepo)
     {
-        parent::__construct();
+      parent::__construct();
     	$this->customerRepo = $customerRepo;
     }
 
@@ -83,7 +83,14 @@ class CustomerController extends Controller
 
     		$inputs_array = $inputs['data'];
 
-    		$customer = CustomerRegistration::where('password', '=', md5($inputs_array['password']))->where('email', '=', $inputs_array['cred'])->orWhere('phone', '=', $inputs_array['cred'])->first();
+        $cred = $inputs_array['cred'];
+
+        $customer = CustomerRegistration::where('password', '=', md5($inputs_array['password']))
+                                          ->where(function($query) use ($cred){
+                                              $query->where('email',   '=', $cred);
+                                              $query->orWhere('phone', '=', $cred);
+                                          })
+                                          ->first();
 	        
         	if (!empty($customer)) {
         	       $response = [
