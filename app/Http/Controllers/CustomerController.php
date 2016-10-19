@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Input, DB, App, Config, Mail;
 use App\Models\CustomerRegistration;
 use App\Repositories\CustomerRepository;
-use App\Http\Controllers\view;
+
 
 class CustomerController extends Controller
 {
