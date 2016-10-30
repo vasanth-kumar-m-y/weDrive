@@ -196,7 +196,7 @@ class CustomerController extends Controller
             {
                 //generate new pwd and send mail to customer
 
-                /*$customerID = $Checkcustomer->id;
+                $customerID = $Checkcustomer->id;
                 $newPwd     = $this->getUniquePwd(9, $customerID);
                
                 $Encpt = md5($newPwd);
@@ -207,6 +207,7 @@ class CustomerController extends Controller
 
                 $customer = array(
                         'receiver' => $customerEmail,
+                        'name'     => $Checkcustomer->name,
                     );
 
                 $data = array(
@@ -216,9 +217,8 @@ class CustomerController extends Controller
 
                 Mail::send('emails.forgotPassword', $data, function($message) use ($customer)
                 {
-                    $message->from(Config::get('app.admin_email'), 'Vdrive');
-                    $message->to($customer['receiver'], $customer['receiver'])->subject('Your New Password');
-                });*/
+                    $message->to($customer['receiver'], $customer['name'])->subject('Your New Password');
+                });
 
                  $response = [
                        'status'  => true,
@@ -274,7 +274,7 @@ class CustomerController extends Controller
             $NewPass     = $inputArray['Newpassword'];
             $Code        = $inputArray['Code'];
 
-            $Checkcustomer   = DB::select('select id, email from users where md5(90*13+id) = ?', [$Code]);
+            $Checkcustomer   = DB::select('select * from users where md5(90*13+id) = ?', [$Code]);
             $CheckcustomerID = $Checkcustomer[0]->id;
             
             if($Checkcustomer == null)
@@ -299,6 +299,7 @@ class CustomerController extends Controller
 
                 $customer = array(
                         'receiver' => $Checkcustomer[0]->email,
+                        'name'     => $Checkcustomer[0]->name,
                     );
 
                 $data = array(
@@ -307,8 +308,7 @@ class CustomerController extends Controller
 
                 Mail::send('emails.passwordChanged', $data, function($message) use ($customer)
                 {
-                    $message->from('admin@vdrive.com', 'Vdrive');
-                    $message->to($customer['receiver'], $customer['receiver'])->subject('Password Changed');
+                    $message->to($customer['receiver'], $customer['name'])->subject('Password Changed');
                 });
 
                 $response = [

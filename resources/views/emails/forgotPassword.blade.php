@@ -11,8 +11,8 @@
                 <tbody><tr>
                     <td valign="bottom" style="padding:20px 16px 12px">
                         <div>
-                            <a href="http://oceanstyxx.com/" target="_blank">
-                                <img src="{{ asset('http://oceanstyxx.com/assets/img/logo.png') }}">
+                            <a href="http://pubdrivers.com/" target="_blank">
+                                <img src="{{ asset('assets/img/pubdrive_logo.png') }}">
                             </a>
                         </div>
                     </td>
@@ -28,12 +28,10 @@
                         <div style="max-width:100%;margin:0 auto;padding:0 6px">
                             <div style="background:white;border-radius:0.5rem;padding:2rem;margin-bottom:1rem">
                                 <p>Hi, {{$email}}</p>
-                                <p>Your New Password</p>
-                                <p>You requested forgot password for your Vdrive App.</p>
+                                <p>You requested forgot password for your Pubdrivers App.</p>
                                 <p>Your New Password:</p>
-                                <p><b>{{$Code}}</b></p>
-                                <p>If you did not make this request, you can safely ignore this email. Rest assured your account is safe.</p>
-                                <p>Questions? Contact Vdrive Support.</p>
+                                <p><b>{{$newPwd}}</b></p>
+                                <p>Questions? <a href="http://pubdrivers.com/#/contactus" target="_blank"> Contact Pubdrivers Support.</a></p>
                             </div>
 
                         </div>

@@ -2,9 +2,6 @@
 
 return [
 
-    'vdrive_url'  => 'http://localhost:9000/#',
-    'admin_email' => '',
-
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode
