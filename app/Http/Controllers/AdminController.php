@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use Input, DB, App, Config;
+use App\Models\Admin;
 use App\Models\DriverRegistration;
 use App\Repositories\DriverRegistrationRepository;
 use App\Http\Controllers\DriverRegistrationTransformer;
@@ -31,6 +32,47 @@ class AdminController extends Controller
      * @return Response
      * @internal param $data
      */
+
+    public function adminLogIn()
+    {
+        try{
+
+            $inputs = Input::all();
+
+            $inputs_array = $inputs['data'];
+
+            $admin = Admin::where('email', '=', $inputs_array['email'])->where('password', '=', md5($inputs_array['password']))->first();
+                
+                if (!empty($admin)) {
+                       $response = [
+                           'status'  => true,
+                           'code' => 200,
+                           'admin' => $admin
+                         ];
+                        return $response;
+                
+                } else {
+                     $response = [
+                           'status'  => false,
+                           'code' => 401,
+                           'message' => 'Admin authentication failed.'
+                         ];
+                        return $response;
+                }
+
+            }catch(Exception $e){
+                $response = [
+                           'status'  => false,
+                           'code' => 501,
+                           'message' =>  'Error occured! Please try later'
+                         ];
+                return json_encode($response);
+
+            }
+              
+    }
+
+
     public function getRegisteredDrivers()
     {
         
@@ -312,6 +354,47 @@ class AdminController extends Controller
         }
 
         return $driveDetails;
+    }
+
+
+    public function LogOut($id)
+    {
+
+      try {
+
+        $admin = Admin::find($id);
+
+        if(empty($admin)){
+
+          $response =  [
+                       'status'  => false,
+                       'code'     => 401,
+                       'message' => 'No admin exist with this Id'
+                     ];
+                    return json_encode($response);
+
+        }else{
+
+          $response =  [
+                         'status'   => true,
+                         'code'     => 200,
+                         'admin' => $admin,
+                         'message'  => 'Logged out successfully!'
+                       ];
+                      return json_encode($response);
+
+        }
+
+        } catch (Exception $e) {
+
+            $response = [
+                       'status'  => false,
+                       'code'    => 501,
+                       'message' => 'Error occured! Please try later'
+                     ];
+
+            return json_encode($response);  
+        }
     }
 
 

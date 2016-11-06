@@ -23,12 +23,14 @@ Route::get('/', function () {
 Route::group(['prefix' => 'v1', 'middleware' => 'cors'], function () {
 
 	// ------------------------ ADMIN APP ROUTE ----------------------------------
+	Route::post('admin/login', 'AdminController@adminLogIn');
 	Route::get('admin/getAllDrivers', 'AdminController@getRegisteredDrivers');
 	Route::post('admin/registerDriver', 'AdminController@driverRegistration');
 	Route::post('admin/deleteDriver', 'AdminController@DeleteDriver');
 	Route::get('admin/{user_id}/getDriverDetails', 'AdminController@getDriverDetails');
 	Route::get('admin/getAllDriveRequest', 'AdminController@getAllDriveRequest');
 	Route::post('admin/assignDriverForRide', 'AdminController@assignDriverForRide');
+	Route::get('admin/{admin_id}/logout', 'AdminController@LogOut');
 
     // ------------------------ MASTER APP ROUTE --------------------------------
     Route::get('master/getPubs', 'MasterController@getAllPubs');

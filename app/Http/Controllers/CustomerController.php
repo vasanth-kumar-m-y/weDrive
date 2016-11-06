@@ -338,18 +338,32 @@ class CustomerController extends Controller
 
         $customer = CustomerRegistration::find($id);
 
-        $response =  [
-                       'status'  => true,
-                       'code'    => 200,
-                       'message' => 'Logged out successfully!'
+        if(empty($customer)){
+
+          $response =  [
+                       'status'  => false,
+                       'code'     => 401,
+                       'message' => 'No customer exist with this Id'
                      ];
                     return json_encode($response);
+
+        }else{
+
+          $response =  [
+                         'status'   => true,
+                         'code'     => 200,
+                         'customer' => $customer,
+                         'message'  => 'Logged out successfully!'
+                       ];
+                      return json_encode($response);
+
+        }
 
         } catch (Exception $e) {
 
             $response = [
                        'status'  => false,
-                       'code' => 501,
+                       'code'    => 501,
                        'message' => 'Error occured! Please try later'
                      ];
 

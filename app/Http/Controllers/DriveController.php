@@ -51,7 +51,7 @@ class DriveController extends Controller
                        'message' => 'Booking request sent successfully!'
                      ];
                     return json_encode($response);
-                    //return $response;
+                    
             }else{
                    $response = [
                        'status'  => false,

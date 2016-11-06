@@ -31,7 +31,7 @@ class DriverController extends Controller
 
             $inputs_array = $inputs['data'];
 
-    		$driverDetails = DriverRegistration::where('driver_code', '=', $inputs_array['driverCode'])->first();
+    		    $driverDetails = DriverRegistration::where('driver_code', '=', $inputs_array['driverCode'])->first();
 
     		if (!empty($driverDetails)) {
 

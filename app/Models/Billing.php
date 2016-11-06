@@ -4,5 +4,5 @@ namespace App\Models;
 
 class Billing extends \Eloquent {
 	protected $table = 'billing';
-	public $timestamps  = false;
+	//public $timestamps  = false;
 }
