@@ -11,25 +11,25 @@ class DriveRequest extends \Eloquent {
 
 	public function customer()
     {
-        return $this->hasOne('App\Models\CustomerRegistration', 'id', 'customer_id');
+        return $this->belongsTo('App\Models\CustomerRegistration', 'customer_id', 'id');
     }
 
 
     public function pub()
     {
-        return $this->hasOne('App\Models\PubMaster', 'id', 'pub_id');
+        return $this->belongsTo('App\Models\PubMaster', 'pub_id', 'id');
     }
 
 
     public function driver()
     {
-        return $this->hasOne('App\Models\DriverRegistration', 'id', 'driver_id');
+        return $this->belongsTo('App\Models\DriverRegistration', 'driver_id', 'id');
     }
 
 
     public function billing()
     {
-        return $this->belongsTo('App\Models\Billing', 'id', 'drive_request_id');
+        return $this->hasMany('App\Models\Billing', 'drive_request_id', 'id');
     }
 
 

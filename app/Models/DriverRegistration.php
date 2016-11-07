@@ -15,11 +15,11 @@ class DriverRegistration extends \Eloquent {
 
 	public function address()
     {
-        return $this->belongsTo('App\Models\DriverAddress', 'id', 'driver_id');
+        return $this->hasOne('App\Models\DriverAddress', 'driver_id', 'id');
     }
 
     public function transmissionType()
     {
-        return $this->hasOne('App\Models\TransmissionType', 'id', 'transmission_type_id');
+        return $this->belongsTo('App\Models\TransmissionType', 'transmission_type_id', 'id');
     }
 }

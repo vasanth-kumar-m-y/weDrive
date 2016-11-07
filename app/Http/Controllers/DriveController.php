@@ -134,6 +134,9 @@ class DriveController extends Controller
             $driveRequest =  $this->driveRequest->updateEndDriveTime($inputs_array);
 
             if ($driveRequest->id) {
+
+              $this->generateBillInvoice($driveRequest->id, $driveRequest->customer_id);
+
                  $response = [
                        'status'  => true,
                        'code' => 200,
@@ -160,6 +163,43 @@ class DriveController extends Controller
             return json_encode($response);
         }
         
+    }
+
+
+    public function generateBillInvoice($driveID, $customerId)
+    {
+
+        try{
+
+            $driveDetails = DriveRequest::with('customer', 'pub', 'driver', 'billing')
+                                          ->where('id', $driveID)
+                                          ->where('customer_id', $customerId)
+                                          ->first();
+
+            $customer = array(
+                            'receiver' => $driveDetails->customer->email,
+                            'name'     => $driveDetails->customer->name,
+                        );
+
+            $data = array(
+                  'details'  => $driveDetails
+                );
+
+            Mail::send('emails.billingInvoice', $data, function($message) use ($customer)
+            {
+                $message->to($customer['receiver'], $customer['name'])->subject('Your Billing Invoice');
+            });
+
+        }catch (Exception $e){
+           
+           $response = [
+                       'status'  => false,
+                       'code' => 501,
+                       'message' => 'Error occured! Please try later'
+                     ];
+            return json_encode($response);
+        }
+
     }
   
     
