@@ -108,21 +108,24 @@ class DriveRequestRepository{
 
                 if($driveStartedHour >= $peak1From && $driveStartedHour <= $peak1To){
 
-                       $peakMinutes = $this->calculateTotalMinutes($driveStartedHour, $peak1To);
+                       $totalMinutes = $this->calculateTotalMinutes($driveStartedHour, $driveEndedHour);
 
                        $remainingHourPeakMinutes = 0; $extraMinutes = 0; $totalPeakPrice = 0; $totalExtraPrice = 0;
 
-                        if($peakMinutes > 60)
+                        if($totalMinutes > 60)
                         {
-                            $remainingHourPeakMinutes = $peakMinutes - 60;
-                        }else{
-                            $firstHourPeakMinutes = $peakMinutes;
-                        }
+                            $after_first_hour_drive   = $driveStartedHour + 3600;
+                            if($after_first_hour_drive < $peak1To){
+                                $remainingHourPeakMinutes = $this->calculateTotalMinutes($after_first_hour_drive, $peak1To);
+                                $flag = 1;
+                            }else{
+                                $flag = 0;
+                            }
 
-                        if($remainingHourPeakMinutes == 0)
-                        {
+                            if($remainingHourPeakMinutes == 0)
+                            {
 
-                            $billingDetails1 =  [
+                                $billingDetails1 =  [
                                                   
                                                     [
                                                         'price_breakup' => 'First hour charge', 
@@ -132,11 +135,11 @@ class DriveRequestRepository{
                                                     ]
                                                ];
 
-                            $totalPeakPrice = Config::get('pub')['hour_charge']['peak_hour'];
+                                $totalPeakPrice = Config::get('pub')['hour_charge']['peak_hour'];
 
-                        }else{
+                            }else{
 
-                            $billingDetails1 = [
+                                $billingDetails1 = [
                                                  
                                                     [
                                                         'price_breakup' => 'First hour charge', 
@@ -153,14 +156,30 @@ class DriveRequestRepository{
                                                     ]
                                                ];
 
-                            $totalPeakPrice = Config::get('pub')['hour_charge']['peak_hour'] + $remainingHourPeakMinutes * Config::get('pub')['additional_hour_charge']['peak_hour'];
-                        }
+                                $totalPeakPrice = Config::get('pub')['hour_charge']['peak_hour'] + $remainingHourPeakMinutes * Config::get('pub')['additional_hour_charge']['peak_hour'];
 
+                            }
+
+                        }else{
+
+                            $billingDetails1 =  [
+                                                  
+                                                    [
+                                                        'price_breakup' => 'First hour charge', 
+                                                        'quantity'      => 1, 
+                                                        'unit_price'    => Config::get('pub')['hour_charge']['peak_hour'], 
+                                                        'total_price'   => Config::get('pub')['hour_charge']['peak_hour']
+                                                    ]
+                                               ];
+
+                            $totalPeakPrice = Config::get('pub')['hour_charge']['peak_hour'];
+
+                            return [$totalMinutes, $totalPeakPrice, $billingDetails1];
+                        }
+                        
                         if($driveEndedHour <= $normalTo)
                         { 
-                            $normalMinutes  = $this->calculateTotalMinutes($normalFrom, $driveEndedHour);
-
-                            $extraMinutes   = $normalMinutes; 
+                            $normalMinutes  = $this->calculateTotalMinutes(($flag == 1)?$normalFrom:$after_first_hour_drive, $driveEndedHour);
 
                             $totalExtraPrice = $normalMinutes * Config::get('pub')['additional_hour_charge']['normal_hour'];
 
@@ -175,10 +194,8 @@ class DriveRequestRepository{
 
                         }else if($driveEndedHour <= $peak2To){
                         
-                            $normalMinutes = $this->calculateTotalMinutes($normalFrom, $normalTo);
+                            $normalMinutes = $this->calculateTotalMinutes(($flag == 1)?$normalFrom:$after_first_hour_drive, $normalTo);
                             $peak2Minutes  = $this->calculateTotalMinutes($peak2From, $driveEndedHour);
-
-                            $extraMinutes  = $normalMinutes + $peak2Minutes; 
 
                             $totalExtraPrice = ($normalMinutes * Config::get('pub')['additional_hour_charge']['normal_hour']) + ($peak2Minutes * Config::get('pub')['additional_hour_charge']['peak_hour']);
 
@@ -200,11 +217,9 @@ class DriveRequestRepository{
 
                         }else if($driveEndedHour <= $nightTo){
                             
-                            $normalMinutes = $this->calculateTotalMinutes($normalFrom, $normalTo);
+                            $normalMinutes = $this->calculateTotalMinutes(($flag == 1)?$normalFrom:$after_first_hour_drive, $normalTo);
                             $peak2Minutes  = $this->calculateTotalMinutes($peak2From, $peak2To);
                             $nightMinutes  = $this->calculateTotalMinutes($nightFrom, $driveEndedHour);
-
-                            $extraMinutes  =  $normalMinutes + $peak2Minutes + $nightMinutes;
 
                             $totalExtraPrice = ($normalMinutes * Config::get('pub')['additional_hour_charge']['normal_hour']) + ($peak2Minutes * Config::get('pub')['additional_hour_charge']['peak_hour']) + ($nightMinutes * Config::get('pub')['additional_hour_charge']['night_hour']);
 
@@ -233,8 +248,6 @@ class DriveRequestRepository{
 
                         }
 
-                        $totalMinutes = $peakMinutes + $extraMinutes;
-
                         $totalCalculatedAmount = $totalPeakPrice + $totalExtraPrice;
 
                         $billingDetails = array_merge($billingDetails1, $billingDetails2);
@@ -244,21 +257,24 @@ class DriveRequestRepository{
                 
                 }else if($driveStartedHour >= $peak2From && $driveStartedHour <= $peak2To){
 
-                       $peakMinutes = $this->calculateTotalMinutes($driveStartedHour, $peak2To);
+                       $totalMinutes = $this->calculateTotalMinutes($driveStartedHour, $driveEndedHour);
 
                        $remainingHourPeakMinutes = 0; $extraMinutes = 0; $totalPeakPrice = 0; $totalExtraPrice = 0;
 
-                        if($peakMinutes > 60)
+                        if($totalMinutes > 60)
                         {
-                            $remainingHourPeakMinutes = $peakMinutes - 60;
-                        }else{
-                            $firstHourPeakMinutes = $peakMinutes;
-                        }
+                            $after_first_hour_drive   = $driveStartedHour + 3600;
+                            if($after_first_hour_drive < $peak2To){
+                                $remainingHourPeakMinutes = $this->calculateTotalMinutes($after_first_hour_drive, $peak2To);
+                                $flag = 1;
+                            }else{
+                                $flag = 0;
+                            }
 
-                        if($remainingHourPeakMinutes == 0)
-                        {
+                            if($remainingHourPeakMinutes == 0)
+                            {
 
-                            $billingDetails1 =  [
+                                $billingDetails1 =  [
                                                   
                                                     [
                                                         'price_breakup' => 'First hour charge', 
@@ -268,11 +284,11 @@ class DriveRequestRepository{
                                                     ]
                                                ];
 
-                            $totalPeakPrice = Config::get('pub')['hour_charge']['peak_hour'];
+                                $totalPeakPrice = Config::get('pub')['hour_charge']['peak_hour'];
 
-                        }else{
+                            }else{
 
-                            $billingDetails1 = [
+                                $billingDetails1 = [
                                                  
                                                     [
                                                         'price_breakup' => 'First hour charge', 
@@ -289,14 +305,30 @@ class DriveRequestRepository{
                                                     ]
                                                ];
 
-                            $totalPeakPrice = Config::get('pub')['hour_charge']['peak_hour'] + $remainingHourPeakMinutes * Config::get('pub')['additional_hour_charge']['peak_hour'];
+                                $totalPeakPrice = Config::get('pub')['hour_charge']['peak_hour'] + $remainingHourPeakMinutes * Config::get('pub')['additional_hour_charge']['peak_hour'];
+
+                            }
+
+                        }else{
+
+                            $billingDetails1 =  [
+                                                  
+                                                    [
+                                                        'price_breakup' => 'First hour charge', 
+                                                        'quantity'      => 1, 
+                                                        'unit_price'    => Config::get('pub')['hour_charge']['peak_hour'], 
+                                                        'total_price'   => Config::get('pub')['hour_charge']['peak_hour']
+                                                    ]
+                                               ];
+
+                            $totalPeakPrice = Config::get('pub')['hour_charge']['peak_hour'];
+
+                            return [$totalMinutes, $totalPeakPrice, $billingDetails1];
                         }
 
                         if($driveEndedHour <= $nightTo)
                         { 
-                            $nightMinutes  = $this->calculateTotalMinutes($nightFrom, $driveEndedHour);
-
-                            $extraMinutes   = $nightMinutes; 
+                            $nightMinutes  = $this->calculateTotalMinutes(($flag == 1)?$nightFrom:$after_first_hour_drive, $driveEndedHour);
 
                             $totalExtraPrice = $nightMinutes * Config::get('pub')['additional_hour_charge']['night_hour'];
 
@@ -311,10 +343,8 @@ class DriveRequestRepository{
 
                         }else if($driveEndedHour <= strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1To)))){
                         
-                            $nightMinutes = $this->calculateTotalMinutes($nightFrom, $nightTo);
+                            $nightMinutes = $this->calculateTotalMinutes(($flag == 1)?$nightFrom:$after_first_hour_drive, $nightTo);
                             $peak1Minutes = $this->calculateTotalMinutes(strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1From))), $driveEndedHour);
-
-                            $extraMinutes  = $nightMinutes + $peak1Minutes; 
 
                             $totalExtraPrice = ($nightMinutes * Config::get('pub')['additional_hour_charge']['night_hour']) + ($peak1Minutes * Config::get('pub')['additional_hour_charge']['peak_hour']);
 
@@ -336,11 +366,9 @@ class DriveRequestRepository{
 
                         }else if($driveEndedHour <= strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $normalTo)))){
                             
-                            $nightMinutes  = $this->calculateTotalMinutes($nightFrom, $nightTo);
+                            $nightMinutes  = $this->calculateTotalMinutes(($flag == 1)?$nightFrom:$after_first_hour_drive, $nightTo);
                             $peak1Minutes  = $this->calculateTotalMinutes(strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1From))), strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1To))));
                             $normalMinutes = $this->calculateTotalMinutes(strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $normalFrom))), $driveEndedHour);
-
-                            $extraMinutes  =  $nightMinutes + $peak1Minutes + $normalMinutes;
 
                             $totalExtraPrice = ($nightMinutes * Config::get('pub')['additional_hour_charge']['night_hour']) + ($peak1Minutes * Config::get('pub')['additional_hour_charge']['peak_hour']) + ($normalMinutes * Config::get('pub')['additional_hour_charge']['normal_hour']);
 
@@ -369,8 +397,6 @@ class DriveRequestRepository{
 
                         }
 
-                        $totalMinutes = $peakMinutes + $extraMinutes;
-
                         $totalCalculatedAmount = $totalPeakPrice + $totalExtraPrice;
 
                         $billingDetails = array_merge($billingDetails1, $billingDetails2);
@@ -380,21 +406,24 @@ class DriveRequestRepository{
 
                 }else if($driveStartedHour >= $normalFrom && $driveStartedHour <= $normalTo){
 
-                       $normalMinutes = $this->calculateTotalMinutes($driveStartedHour, $normalTo);
+                       $totalMinutes = $this->calculateTotalMinutes($driveStartedHour, $driveEndedHour);
 
                        $remainingHourNormalMinutes = 0; $extraMinutes = 0; $totalNormalPrice = 0; $totalExtraPrice = 0;
 
-                        if($normalMinutes > 60)
+                        if($totalMinutes > 60)
                         {
-                            $remainingHourNormalMinutes = $normalMinutes - 60;
-                        }else{
-                            $firstHourNormalMinutes = $normalMinutes;
-                        }
+                            $after_first_hour_drive   = $driveStartedHour + 3600;
+                            if($after_first_hour_drive < $normalTo){
+                                $remainingHourNormalMinutes = $this->calculateTotalMinutes($after_first_hour_drive, $normalTo);
+                                $flag = 1;
+                            }else{
+                                $flag = 0;
+                            }
 
-                        if($remainingHourNormalMinutes == 0)
-                        {
+                            if($remainingHourNormalMinutes == 0)
+                            {
 
-                            $billingDetails1 =  [
+                                $billingDetails1 =  [
                                                   
                                                     [
                                                         'price_breakup' => 'First hour charge', 
@@ -404,11 +433,11 @@ class DriveRequestRepository{
                                                     ]
                                                ];
 
-                            $totalNormalPrice = Config::get('pub')['hour_charge']['normal_hour'];
+                                $totalNormalPrice = Config::get('pub')['hour_charge']['normal_hour'];
 
-                        }else{
+                            }else{
 
-                            $billingDetails1 = [
+                                $billingDetails1 = [
                                                  
                                                     [
                                                         'price_breakup' => 'First hour charge', 
@@ -425,14 +454,30 @@ class DriveRequestRepository{
                                                     ]
                                                ];
 
-                            $totalNormalPrice = Config::get('pub')['hour_charge']['normal_hour'] + $remainingHourNormalMinutes * Config::get('pub')['additional_hour_charge']['normal_hour'];
+                                $totalNormalPrice = Config::get('pub')['hour_charge']['normal_hour'] + $remainingHourNormalMinutes * Config::get('pub')['additional_hour_charge']['normal_hour'];
+
+                            }
+
+                        }else{
+
+                            $billingDetails1 =  [
+                                                  
+                                                    [
+                                                        'price_breakup' => 'First hour charge', 
+                                                        'quantity'      => 1, 
+                                                        'unit_price'    => Config::get('pub')['hour_charge']['normal_hour'], 
+                                                        'total_price'   => Config::get('pub')['hour_charge']['normal_hour']
+                                                    ]
+                                               ];
+
+                            $totalNormalPrice = Config::get('pub')['hour_charge']['normal_hour'];
+
+                            return [$totalMinutes, $totalNormalPrice, $billingDetails1];
                         }
 
                         if($driveEndedHour <= $peak2To)
                         { 
-                            $peak2Minutes  = $this->calculateTotalMinutes($peak2From, $driveEndedHour);
-
-                            $extraMinutes  = $peak2Minutes; 
+                            $peak2Minutes  = $this->calculateTotalMinutes(($flag == 1)?$peak2From:$after_first_hour_drive, $driveEndedHour);
 
                             $totalExtraPrice = $peak2Minutes * Config::get('pub')['additional_hour_charge']['peak_hour'];
 
@@ -447,10 +492,8 @@ class DriveRequestRepository{
 
                         }else if($driveEndedHour <= $nightTo){
                          
-                            $peak2Minutes  = $this->calculateTotalMinutes($peak2From, $peak2To);
+                            $peak2Minutes  = $this->calculateTotalMinutes(($flag == 1)?$peak2From:$after_first_hour_drive, $peak2To);
                             $nightMinutes  = $this->calculateTotalMinutes($nightFrom, $driveEndedHour);
-
-                            $extraMinutes  = $peak2Minutes + $nightMinutes; 
 
                             $totalExtraPrice = ($peak2Minutes * Config::get('pub')['additional_hour_charge']['peak_hour']) + ($nightMinutes * Config::get('pub')['additional_hour_charge']['night_hour']);
 
@@ -472,11 +515,9 @@ class DriveRequestRepository{
 
                         }else if($driveEndedHour <= strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1To)))){
                           
-                            $peak2Minutes  = $this->calculateTotalMinutes($peak2From, $peak2To);
+                            $peak2Minutes  = $this->calculateTotalMinutes(($flag == 1)?$peak2From:$after_first_hour_drive, $peak2To);
                             $nightMinutes  = $this->calculateTotalMinutes($nightFrom, $nightTo);
                             $peak1Minutes  = $this->calculateTotalMinutes(strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1From))), $driveEndedHour);
-
-                            $extraMinutes  = $peak2Minutes + $nightMinutes + $peak1Minutes;
 
                             $totalExtraPrice = ($peak2Minutes * Config::get('pub')['additional_hour_charge']['peak_hour']) + ($nightMinutes * Config::get('pub')['additional_hour_charge']['night_hour']) + ($peak1Minutes * Config::get('pub')['additional_hour_charge']['peak_hour']);
 
@@ -505,8 +546,6 @@ class DriveRequestRepository{
 
                         }
 
-                        $totalMinutes = $normalMinutes + $extraMinutes;
-
                         $totalCalculatedAmount = $totalNormalPrice + $totalExtraPrice;
 
                         $billingDetails = array_merge($billingDetails1, $billingDetails2);
@@ -517,21 +556,24 @@ class DriveRequestRepository{
                 }else if($driveStartedHour >= $nightFrom && $driveStartedHour <= $nightTo){
 
 
-                        $nightMinutes = $this->calculateTotalMinutes($driveStartedHour, $nightTo);
+                        $totalMinutes = $this->calculateTotalMinutes($driveStartedHour, $driveEndedHour);
 
                         $remainingHourNightMinutes = 0; $extraMinutes = 0; $totalNightPrice = 0; $totalExtraPrice = 0;
 
-                        if($nightMinutes > 60)
+                        if($totalMinutes > 60)
                         {
-                            $remainingHourNightMinutes = $nightMinutes - 60;
-                        }else{
-                            $firstHourNightMinutes = $nightMinutes;
-                        }
+                            $after_first_hour_drive   = $driveStartedHour + 3600;
+                            if($after_first_hour_drive < $nightTo){
+                                $remainingHourNightMinutes = $this->calculateTotalMinutes($after_first_hour_drive, $nightTo);
+                                $flag = 1;
+                            }else{
+                                $flag = 0;
+                            }
 
-                        if($remainingHourNightMinutes == 0)
-                        {
+                            if($remainingHourNightMinutes == 0)
+                            {
 
-                            $billingDetails1 =  [
+                                $billingDetails1 =  [
                                                   
                                                     [
                                                         'price_breakup' => 'First hour charge', 
@@ -541,11 +583,11 @@ class DriveRequestRepository{
                                                     ]
                                                ];
 
-                            $totalNightPrice = Config::get('pub')['hour_charge']['normal_hour'];
+                                $totalNightPrice = Config::get('pub')['hour_charge']['normal_hour'];
 
-                        }else{
+                            }else{
 
-                            $billingDetails1 = [
+                               $billingDetails1 = [
                                                  
                                                     [
                                                         'price_breakup' => 'First hour charge', 
@@ -562,14 +604,30 @@ class DriveRequestRepository{
                                                     ]
                                                ];
 
-                            $totalNightPrice = Config::get('pub')['hour_charge']['night_hour'] + $remainingHourNightMinutes * Config::get('pub')['additional_hour_charge']['night_hour'];
+                               $totalNightPrice = Config::get('pub')['hour_charge']['night_hour'] + $remainingHourNightMinutes * Config::get('pub')['additional_hour_charge']['night_hour'];
+
+                            }
+
+                        }else{
+
+                            $billingDetails1 =  [
+                                                  
+                                                    [
+                                                        'price_breakup' => 'First hour charge', 
+                                                        'quantity'      => 1, 
+                                                        'unit_price'    => Config::get('pub')['hour_charge']['night_hour'], 
+                                                        'total_price'   => Config::get('pub')['hour_charge']['night_hour']
+                                                    ]
+                                               ];
+
+                            $totalNightPrice = Config::get('pub')['hour_charge']['normal_hour'];
+
+                            return [$totalMinutes, $totalNightPrice, $billingDetails1];
                         }
 
                         if($driveEndedHour <= strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1To))))
                         { 
-                            $peak1Minutes  = $this->calculateTotalMinutes(strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1From))), $driveEndedHour);
-
-                            $extraMinutes  = $peak1Minutes; 
+                            $peak1Minutes  = $this->calculateTotalMinutes(($flag == 1)?strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1From))):$after_first_hour_drive, $driveEndedHour);
 
                             $totalExtraPrice = $peak1Minutes * Config::get('pub')['additional_hour_charge']['peak_hour'];
 
@@ -584,10 +642,8 @@ class DriveRequestRepository{
 
                         }else if($driveEndedHour <= strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $normalTo)))){
                         
-                            $peak1Minutes  = $this->calculateTotalMinutes(strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1From))), strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1To))));
+                            $peak1Minutes  = $this->calculateTotalMinutes(($flag == 1)?strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1From))):$after_first_hour_drive, strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1To))));
                             $normalMinutes = $this->calculateTotalMinutes(strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $normalFrom))), $driveEndedHour);
-
-                            $extraMinutes  = $peak1Minutes + $normalMinutes; 
 
                             $totalExtraPrice = ($peak1Minutes * Config::get('pub')['additional_hour_charge']['peak_hour']) + ($normalMinutes * Config::get('pub')['additional_hour_charge']['normal_hour']);
 
@@ -609,11 +665,9 @@ class DriveRequestRepository{
 
                         }else if($driveEndedHour <= strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak2To)))){
 
-                            $peak1Minutes  = $this->calculateTotalMinutes(strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1From))), strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1To))));
+                            $peak1Minutes  = $this->calculateTotalMinutes(($flag == 1)?strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1From))):$after_first_hour_drive, strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1To))));
                             $normalMinutes = $this->calculateTotalMinutes(strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $normalFrom))), strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $normalTo))));
                             $peak2Minutes  = $this->calculateTotalMinutes(strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak2From))), $driveEndedHour);
-
-                            $extraMinutes  = $peak1Minutes + $normalMinutes + $peak2Minutes;
 
                             $totalExtraPrice = ($peak1Minutes * Config::get('pub')['additional_hour_charge']['peak_hour']) + ($normalMinutes * Config::get('pub')['additional_hour_charge']['normal_hour']) + ($peak2Minutes * Config::get('pub')['additional_hour_charge']['peak_hour']);
 
@@ -641,8 +695,6 @@ class DriveRequestRepository{
                                                ];
 
                         }
-
-                        $totalMinutes = $nightMinutes + $extraMinutes;
 
                         $totalCalculatedAmount = $totalNightPrice + $totalExtraPrice;
 
