@@ -46,7 +46,7 @@ class DriveRequestRepository{
 	{
 	    $driveRequest = DriveRequest::find($inputs_array['driveId']);
         
-        $driveRequest->drive_end_time    =  "2016-11-08 11:24:00";//date("Y-m-d H:i:s");
+        $driveRequest->drive_end_time    =  date("Y-m-d H:i:s");
         $driveRequest->status            = "Ended";
 
         $total_time_rate_charge = $this->findTotalDriveRateAmount($driveRequest);
@@ -82,7 +82,12 @@ class DriveRequestRepository{
             $normalFrom = strtotime($driveStartedDate.' 10:00:00'); 
             $normalTo   = strtotime($driveStartedDate.' 17:00:00');
 
-            $nightFrom  = strtotime($driveStartedDate.' 21:00:00'); 
+            $nFrom  = strtotime($driveStartedDate.' 21:00:00'); 
+            if($nFrom > $driveStartedHour){
+               $nightFrom  = strtotime(date('Y-m-d H:i:s',strtotime('-1 day', strtotime($driveStartedDate.' 21:00:00'))));
+            }else{
+               $nightFrom  = $nFrom; 
+            } 
             $nightTo    = strtotime(date('Y-m-d H:i:s',strtotime('+1 day', strtotime($driveStartedDate.' 07:00:00'))));
 
             if(($driveStartedHour >= $peak1From && $driveEndedHour <= $peak1To) || 
@@ -92,7 +97,7 @@ class DriveRequestRepository{
                                                $this->calculateTotalMinutes($driveStartedHour, $driveEndedHour), 
                                                Config::get('pub')['additional_hour_charge']['peak_hour']);
 
-            }else if($driveStartedHour >= $normalFrom && $driveEndedHour <= $normalTo){echo 'vas'; die();
+            }else if($driveStartedHour >= $normalFrom && $driveEndedHour <= $normalTo){
 
                 return $this->calculateCharges(Config::get('pub')['hour_charge']['normal_hour'], 
                                                $this->calculateTotalMinutes($driveStartedHour, $driveEndedHour),
