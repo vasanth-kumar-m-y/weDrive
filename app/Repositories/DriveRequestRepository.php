@@ -5,6 +5,7 @@ namespace App\Repositories;
 use Input, DB, App, Config;
 use App\Models\DriveRequest;
 use App\Models\Billing;
+use DateTime;
 
 class DriveRequestRepository{
 
@@ -45,7 +46,6 @@ class DriveRequestRepository{
 	public function updateEndDriveTime($inputs_array)
 	{
 	    $driveRequest = DriveRequest::find($inputs_array['driveId']);
-        
         $driveRequest->drive_end_time    =  date("Y-m-d H:i:s");
         $driveRequest->status            = "Ended";
 
@@ -53,6 +53,7 @@ class DriveRequestRepository{
 
         $driveRequest->total_travel_time = $total_time_rate_charge[0];
         $driveRequest->total_drive_rate  = $total_time_rate_charge[1];
+        $driveRequest->invoice_no        = 'PDR-00000'.$driveRequest->id;
 
         $driveRequest-> save();
 
@@ -74,6 +75,8 @@ class DriveRequestRepository{
 
             $driveStartedDate = date('Y-m-d', strtotime($driveDetails->drive_start_time));
 
+            $driveEndedDate   = date('Y-m-d', strtotime($driveDetails->drive_end_time));
+
             $peak1From  = strtotime($driveStartedDate.' 07:00:00'); 
             $peak1To    = strtotime($driveStartedDate.' 10:00:00');
             $peak2From  = strtotime($driveStartedDate.' 17:00:00'); 
@@ -82,13 +85,29 @@ class DriveRequestRepository{
             $normalFrom = strtotime($driveStartedDate.' 10:00:00'); 
             $normalTo   = strtotime($driveStartedDate.' 17:00:00');
 
-            $nFrom  = strtotime($driveStartedDate.' 21:00:00'); 
-            if($nFrom > $driveStartedHour){
-               $nightFrom  = strtotime(date('Y-m-d H:i:s',strtotime('-1 day', strtotime($driveStartedDate.' 21:00:00'))));
+            $checkStartHour = $this->isBetween("00:00", "06:59", date('H:i', strtotime($driveDetails->drive_start_time)));
+            $checkEndHour   = $this->isBetween("00:00", "06:59", date('H:i', strtotime($driveDetails->drive_end_time)));
+            
+            if(!empty($checkStartHour) && !empty($checkEndHour) && ($driveStartedDate == $driveEndedDate) ||
+               !empty($checkStartHour) && empty($checkEndHour) && ($driveStartedDate == $driveEndedDate))
+            {
+
+                $nightFrom  = strtotime(date('Y-m-d H:i:s',strtotime('-1 day', strtotime($driveStartedDate.' 21:00:00')))); 
+                $nightTo    = strtotime($driveStartedDate.' 07:00:00');
+
+            }else if(!empty($checkStartHour) && !empty($checkEndHour) && ($driveStartedDate != $driveEndedDate)){
+                     
+                $nightFrom  = strtotime(date('Y-m-d H:i:s',strtotime('-1 day', strtotime($driveStartedDate.' 21:00:00'))));
+                $nightTo    = strtotime(date('Y-m-d H:i:s',strtotime('+1 day', strtotime($driveStartedDate.' 07:00:00'))));
+
             }else{
-               $nightFrom  = $nFrom; 
-            } 
-            $nightTo    = strtotime(date('Y-m-d H:i:s',strtotime('+1 day', strtotime($driveStartedDate.' 07:00:00'))));
+
+                $nightFrom  = strtotime($driveStartedDate.' 21:00:00'); 
+                $nightTo    = strtotime(date('Y-m-d H:i:s',strtotime('+1 day', strtotime($driveStartedDate.' 07:00:00'))));
+
+            }
+
+            $nightDiff = $this->calculateTotalMinutes($driveStartedHour, $driveEndedHour);
 
             if(($driveStartedHour >= $peak1From && $driveEndedHour <= $peak1To) || 
                ($driveStartedHour >= $peak2From && $driveEndedHour <= $peak2To)){
@@ -103,7 +122,7 @@ class DriveRequestRepository{
                                                $this->calculateTotalMinutes($driveStartedHour, $driveEndedHour),
                                                Config::get('pub')['additional_hour_charge']['normal_hour']);
 
-            }else if($driveStartedHour >= $nightFrom && $driveEndedHour <= $nightTo){
+            }else if($driveStartedHour >= $nightFrom && $driveEndedHour <= $nightTo && $nightDiff <= 600){
 
                 return $this->calculateCharges(Config::get('pub')['hour_charge']['night_hour'], 
                                                $this->calculateTotalMinutes($driveStartedHour, $driveEndedHour), 
@@ -680,6 +699,11 @@ class DriveRequestRepository{
 
                         if($totalMinutes > 60)
                         {
+                            if(!empty($checkStartHour) && !empty($checkEndHour) && ($driveStartedDate != $driveEndedDate))
+                            {
+                               $nightTo  = strtotime(date('Y-m-d H:i:s',strtotime('-1 day', $nightTo)));
+                            }
+                     
                             $after_first_hour_drive   = $driveStartedHour + 3600;
                             if($after_first_hour_drive < $nightTo){
                                 $remainingHourNightMinutes = $this->calculateTotalMinutes($after_first_hour_drive, $nightTo);
@@ -743,9 +767,24 @@ class DriveRequestRepository{
                             return [$totalMinutes, $totalNightPrice, $billingDetails1];
                         }
 
-                        if($driveEndedHour <= strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1To))))
+                        $checkPeak1  = empty($checkStartHour)?strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1To))):$peak1To;
+                        $checkNormal = empty($checkStartHour)?strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $normalTo))):$normalTo;
+                        $checkPeak2  = empty($checkStartHour)?strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak2To))):$peak2To;
+
+                        if(!empty($checkStartHour) && !empty($checkEndHour) && ($driveStartedDate != $driveEndedDate) 
+                            || ($driveStartedDate == $driveEndedDate) || ($driveStartedDate != $driveEndedDate))
+                        {
+                           $checknight2  = strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $nightTo)));
+                        }else{
+                           $checknight2  = $nightTo;
+                        }
+
+                        if($driveEndedHour <= $checkPeak1)
                         { 
-                            $peak1Minutes  = $this->calculateTotalMinutes(($flag == 1)?strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1From))):$after_first_hour_drive, $driveEndedHour);
+
+                            $p1From = empty($checkStartHour)?strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1From))):$peak1From;
+
+                            $peak1Minutes  = $this->calculateTotalMinutes(($flag == 1)?$p1From:$after_first_hour_drive, $driveEndedHour);
 
                             $billingDetails2 = [ 
                                                  [
@@ -758,10 +797,14 @@ class DriveRequestRepository{
 
                             $totalExtraPrice = $this->calculateSum($billingDetails2);
 
-                        }else if($driveEndedHour <= strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $normalTo)))){
-                        
-                            $peak1Minutes  = $this->calculateTotalMinutes(($flag == 1)?strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1From))):$after_first_hour_drive, strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1To))));
-                            $normalMinutes = $this->calculateTotalMinutes(strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $normalFrom))), $driveEndedHour);
+                        }else if($driveEndedHour <= $checkNormal){
+                            
+                            $p1From = empty($checkStartHour)?strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1From))):$peak1From;
+                            $p1To   = empty($checkStartHour)?strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1To))):$peak1To;
+                            $nFrom  = empty($checkStartHour)?strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $normalFrom))):$normalFrom;
+
+                            $peak1Minutes  = $this->calculateTotalMinutes(($flag == 1)?$p1From:$after_first_hour_drive, $p1To);
+                            $normalMinutes = $this->calculateTotalMinutes($nFrom, $driveEndedHour);
 
                             $billingDetails2 = [ 
                                                  [
@@ -781,11 +824,17 @@ class DriveRequestRepository{
 
                             $totalExtraPrice = $this->calculateSum($billingDetails2);
 
-                        }else if($driveEndedHour <= strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak2To)))){
+                        }else if($driveEndedHour <= $checkPeak2){
 
-                            $peak1Minutes  = $this->calculateTotalMinutes(($flag == 1)?strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1From))):$after_first_hour_drive, strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1To))));
-                            $normalMinutes = $this->calculateTotalMinutes(strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $normalFrom))), strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $normalTo))));
-                            $peak2Minutes  = $this->calculateTotalMinutes(strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak2From))), $driveEndedHour);
+                            $p1From = empty($checkStartHour)?strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1From))):$peak1From;
+                            $p1To   = empty($checkStartHour)?strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1To))):$peak1To;
+                            $nFrom  = empty($checkStartHour)?strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $normalFrom))):$normalFrom;
+                            $nTo    = empty($checkStartHour)?strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $normalTo))):$normalTo;
+                            $p2From = empty($checkStartHour)?strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak2From))):$peak2From;
+
+                            $peak1Minutes  = $this->calculateTotalMinutes(($flag == 1)?$p1From:$after_first_hour_drive, $p1To);
+                            $normalMinutes = $this->calculateTotalMinutes($nFrom, $nTo);
+                            $peak2Minutes  = $this->calculateTotalMinutes($p2From, $driveEndedHour);
 
                             $billingDetails2 = [ 
                                                  [
@@ -812,11 +861,19 @@ class DriveRequestRepository{
 
                             $totalExtraPrice = $this->calculateSum($billingDetails2);
 
-                        }else if($driveEndedHour <= strtotime(date('Y-m-d H:i:s',strtotime('+2 day', $nightTo)))){
 
-                            $peak1Minutes  = $this->calculateTotalMinutes(($flag == 1)?strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1From))):$after_first_hour_drive, strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1To))));
-                            $normalMinutes = $this->calculateTotalMinutes(strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $normalFrom))), strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $normalTo))));
-                            $peak2Minutes  = $this->calculateTotalMinutes(strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak2From))), strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak2To))));
+                        }else if($driveEndedHour <=  $checknight2){
+
+                            $p1From = empty($checkStartHour)?strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1From))):$peak1From;
+                            $p1To   = empty($checkStartHour)?strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak1To))):$peak1To;
+                            $nFrom  = empty($checkStartHour)?strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $normalFrom))):$normalFrom;
+                            $nTo    = empty($checkStartHour)?strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $normalTo))):$normalTo;
+                            $p2From = empty($checkStartHour)?strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak2From))):$peak2From;
+                            $p2To   = empty($checkStartHour)?strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $peak2To))):$peak2To;
+
+                            $peak1Minutes  = $this->calculateTotalMinutes(($flag == 1)?$p1From:$after_first_hour_drive, $p1To);
+                            $normalMinutes = $this->calculateTotalMinutes($nFrom, $nTo);
+                            $peak2Minutes  = $this->calculateTotalMinutes($p2From, $p2To);
                             $nightMinutes  = $this->calculateTotalMinutes(strtotime(date('Y-m-d H:i:s',strtotime('+1 day', $nightFrom))), $driveEndedHour);
 
                             $billingDetails2 = [ 
@@ -955,6 +1012,17 @@ class DriveRequestRepository{
         }
 
         return [$totalMinutes, $totalCalculatedAmount, $billingDetails];
+    }
+
+
+    public function isBetween($from, $till, $input) 
+    {
+        $f = DateTime::createFromFormat('!H:i', $from);
+        $t = DateTime::createFromFormat('!H:i', $till);
+        $i = DateTime::createFromFormat('!H:i', $input);
+        if ($f > $t) $t->modify('+1 day');
+
+        return ($f <= $i && $i <= $t) || ($f <= $i->modify('+1 day') && $i <= $t);
     }
 
 
